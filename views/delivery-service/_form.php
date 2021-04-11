@@ -12,20 +12,29 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php if ($model->id>1 || Yii::$app->request->url==='/web/delivery-service/create') :  ?>
+    <?php if (Yii::$app->request->url==='/web/delivery-service/create') :  ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
 
         <?= $form->field($model, 'short_name')->textInput(['maxlength' => true])->label('Короткое название') ?>
 
-        <?= $form->field($model, 'http_url')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ], ['prompt' => ''])->label('По умолчанию') ?>
+        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ])->label('По умолчанию') ?>
+
+        <?= $form->field($model, 'icon')->fileInput()->label('Иконка') ?>
+
     <?php else : ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
 
         <?= $form->field($model, 'short_name')->textInput(['maxlength' => true])->label('Короткое название') ?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ], ['prompt' => ''])->label('По умолчанию') ?>
+        <?php if ($model->id>1) : ?>
+
+            <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
+
+        <?php endif;?>
+
+        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ])->label('По умолчанию') ?>
     <?php endif; ?>
 
     <div class="form-group">

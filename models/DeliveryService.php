@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "delivery_service".
@@ -19,6 +20,9 @@ class DeliveryService extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $uploadedFile;
+
     public static function tableName()
     {
         return 'delivery_service';
@@ -30,8 +34,9 @@ class DeliveryService extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'short_name', 'icon', 'http_url'], 'required'],
+            [['name', 'short_name', 'http_url'], 'required'],
             [['icon', 'as_default'], 'string'],
+            ['icon', 'file', 'extensions' => 'jpg, jpeg, png'],
             [['name', 'short_name', 'http_url'], 'string', 'max' => 55],
         ];
     }
@@ -49,5 +54,15 @@ class DeliveryService extends \yii\db\ActiveRecord
             'http_url' => 'Http Url',
             'as_default' => 'По умолчанию',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert)
+        {
+            $fileInfo = UploadedFile::getInstance($this, 'icon');
+            $this->icon=file_get_contents($fileInfo->tempName);
+        }
+        return parent::beforeSave($insert);
     }
 }

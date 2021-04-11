@@ -8,6 +8,7 @@ use app\models\DeliveryServiceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * DeliveryServiceController implements the CRUD actions for DeliveryService model.

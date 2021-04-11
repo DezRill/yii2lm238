@@ -24,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
             <?= $this->render('_delivery_view', ['model' => $model]); ?>
         <?php else : ?>
-            <h1>Кабинеты</h1>
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <h1>Кабинеты</h1>
         <?php endif; ?>
     </p>
 
