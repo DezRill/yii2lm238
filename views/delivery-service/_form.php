@@ -19,9 +19,20 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ])->label('По умолчанию') ?>
+        <?= $form->field($model, 'as_default')->dropDownList([ '0' => 'Нет', '1' => "Да", ])->label('По умолчанию') ?>
 
-        <?= $form->field($model, 'icon')->fileInput()->label('Иконка') ?>
+        <?= $form->field($model, 'icon')->fileInput() ?>
+
+        <?php \yii\bootstrap\Modal::begin([
+            'header' => '<h2>Выберите иконку</h2>',
+            'toggleButton' => [
+                'label' => 'Иконка...',
+                'tag' => 'button',
+                'class' => 'btn btn-primary',
+            ],
+        ]) ?>
+        <?= $this->render('_images') ?>
+        <?php \yii\bootstrap\Modal::end() ?><br/><br/>
 
     <?php else : ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
@@ -34,7 +45,7 @@ use yii\widgets\ActiveForm;
 
         <?php endif;?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0', '1', ])->label('По умолчанию') ?>
+        <?= $form->field($model, 'as_default')->dropDownList([ '0' => 'Нет', '1' => "Да", ])->label('По умолчанию') ?>
     <?php endif; ?>
 
     <div class="form-group">
@@ -42,5 +53,4 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

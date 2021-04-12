@@ -4,7 +4,7 @@
 
 <div class="post-container">
     <div class="post-thumb">
-        <?php echo '<img src="data:image/jpeg;base64,'.base64_encode($model->icon ).'"/>'; ?>
+        <?= \yii\helpers\Html::img($model->icon) ?>
     </div>
     <div class="post-content">
         <a href="<?php echo \yii\helpers\Url::to(['/delivery-service/view', 'id' => $model->id]) ?>">

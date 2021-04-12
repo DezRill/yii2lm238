@@ -4,7 +4,7 @@
 
 <div class="post-container">
     <div class="post-thumb">
-        <?php echo '<img src="data:image/jpeg;base64,'.base64_encode($model->icon ).'"/>'; ?>
+        <?= \yii\helpers\Html::img($model->icon) ?>
     </div>
     <div class="post-content">
         <h4><b>Название:</b> <?php echo \yii\helpers\Html::encode($model->name) ?></h4>

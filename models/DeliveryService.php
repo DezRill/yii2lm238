@@ -34,7 +34,7 @@ class DeliveryService extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'short_name', 'http_url'], 'required'],
+            [['name', 'short_name', 'http_url', 'icon'], 'required'],
             [['icon', 'as_default'], 'string'],
             ['icon', 'file', 'extensions' => 'jpg, jpeg, png'],
             [['name', 'short_name', 'http_url'], 'string', 'max' => 55],
@@ -56,7 +56,7 @@ class DeliveryService extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
+    /*public function beforeSave($insert)
     {
         if ($insert)
         {
@@ -64,5 +64,5 @@ class DeliveryService extends \yii\db\ActiveRecord
             $this->icon=file_get_contents($fileInfo->tempName);
         }
         return parent::beforeSave($insert);
-    }
+    }*/
 }

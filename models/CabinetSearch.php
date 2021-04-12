@@ -4,11 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\models\Cabinet;
 
 /**
- * DeliveryServiceSearch represents the model behind the search form of `app\models\DeliveryService`.
+ * CabinetSearch represents the model behind the search form of `app\models\Cabinet`.
  */
-class DeliveryServiceSearch extends DeliveryService
+class CabinetSearch extends Cabinet
 {
     /**
      * {@inheritdoc}
@@ -17,7 +18,7 @@ class DeliveryServiceSearch extends DeliveryService
     {
         return [
             [['id'], 'integer'],
-            [['name', 'short_name', 'icon', 'http_url', 'as_default'], 'safe'],
+            [['api_key', 'date_end', 'name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town', 'dispatch_dep'], 'safe'],
         ];
     }
 
@@ -39,7 +40,7 @@ class DeliveryServiceSearch extends DeliveryService
      */
     public function search($params)
     {
-        $query = DeliveryService::find();
+        $query = Cabinet::find();
 
         // add conditions that should always apply here
 
@@ -58,13 +59,17 @@ class DeliveryServiceSearch extends DeliveryService
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'date_end' => $this->date_end,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'api_key', $this->api_key])
+            ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'short_name', $this->short_name])
-            ->andFilterWhere(['like', 'icon', $this->icon])
-            ->andFilterWhere(['like', 'http_url', $this->http_url])
-            ->andFilterWhere(['like', 'as_default', $this->as_default]);
+            ->andFilterWhere(['like', 'counterparty', $this->counterparty])
+            ->andFilterWhere(['like', 'contact_person', $this->contact_person])
+            ->andFilterWhere(['like', 'recipient_counterparty', $this->recipient_counterparty])
+            ->andFilterWhere(['like', 'town', $this->town])
+            ->andFilterWhere(['like', 'dispatch_dep', $this->dispatch_dep]);
 
         return $dataProvider;
     }
