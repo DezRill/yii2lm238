@@ -10,11 +10,24 @@ use yii\widgets\ActiveForm;
 
 <div class="cabinet-form">
 
+
+
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'api_key')->textInput() ?>
 
-    <?= $form->field($model, 'date_end')->textInput() ?>
+    <h5><b><?= Html::encode('Дата окончания действия ключа') ?></b></h5>
+    <?= \kartik\date\DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'date_end',
+        'name' => 'datePicker',
+        'value' => $model->date_end,
+        'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ]
+    ]) ?><br/>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

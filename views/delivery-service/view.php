@@ -24,13 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
             <?= $this->render('_delivery_view', ['model' => $model]); ?>
         <?php else : ?>
-            <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Редактировать службу', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <h1><?= Html::encode('Кабинеты') ?></h1>
+            <?= Html::a('Создать кабинет', ['cabinet/create'], ['class' => 'btn btn-success']) ?><br/><br/>
             <?= \yii\widgets\ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemView' => '_np_cabinets',
-            ]); ?><br/>
-            <?= Html::a('Создать кабинет', ['cabinet/create'], ['class' => 'btn btn-success']) ?>
+            ]); ?>
         <?php endif; ?>
     </p>
 </div>
