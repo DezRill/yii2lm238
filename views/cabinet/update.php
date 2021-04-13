@@ -20,8 +20,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Кабинеты', 'url' => ['deli
         ],
     ]) ?><br/><br/>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php
 
+        echo $this->render('_form', [
+            'model' => $model,
+            'counterparties' => $counterparties,
+            'contactPersons' => $contactPersons,
+    ]) ?>
 </div>

@@ -12,18 +12,22 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php if (Yii::$app->request->url==='/web/delivery-service/create') :  ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
 
         <?= $form->field($model, 'short_name')->textInput(['maxlength' => true])->label('Короткое название') ?>
 
         <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0' => 'Нет', '1' => "Да", ])->label('По умолчанию') ?>
+        <?= $form->field($model, 'as_default')->dropDownList(['0' => 'Нет', '1' => "Да",])->label('По умолчанию') ?>
 
-        <?= $form->field($model, 'icon')->fileInput() ?>
+        <?= $form->field($model, 'icon', [
+            'options' => [
+                'class' => 'hidden'
+            ]
+        ])->hiddenInput() ?>
 
         <?php \yii\bootstrap\Modal::begin([
+            'id' => 'modal-window',
             'header' => '<h2>Выберите иконку</h2>',
             'toggleButton' => [
                 'label' => 'Иконка...',
@@ -31,22 +35,20 @@ use yii\widgets\ActiveForm;
                 'class' => 'btn btn-primary',
             ],
         ]) ?>
-        <?= $this->render('_images') ?>
+        <?= $this->render('_images',['model'=>$model]) ?>
         <?php \yii\bootstrap\Modal::end() ?><br/><br/>
 
-    <?php else : ?>
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
+        <?/*= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Название') ?>
 
         <?= $form->field($model, 'short_name')->textInput(['maxlength' => true])->label('Короткое название') ?>
 
-        <?php if ($model->id>1) : ?>
+        <?php if ($model->id > 1) : ?>
 
             <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
 
-        <?php endif;?>
+        <?php endif; ?>
 
-        <?= $form->field($model, 'as_default')->dropDownList([ '0' => 'Нет', '1' => "Да", ])->label('По умолчанию') ?>
-    <?php endif; ?>
+        <?= $form->field($model, 'as_default')->dropDownList(['0' => 'Нет', '1' => "Да",])->label('По умолчанию') */?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

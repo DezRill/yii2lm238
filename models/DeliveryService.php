@@ -36,7 +36,6 @@ class DeliveryService extends \yii\db\ActiveRecord
         return [
             [['name', 'short_name', 'http_url', 'icon'], 'required'],
             [['icon', 'as_default'], 'string'],
-            ['icon', 'file', 'extensions' => 'jpg, jpeg, png'],
             [['name', 'short_name', 'http_url'], 'string', 'max' => 55],
         ];
     }
