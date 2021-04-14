@@ -8,32 +8,11 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Cabinet */
 /* @var $form yii\widgets\ActiveForm */
 
-$apiKeyCheckRequest = <<<JS
-$(document).on('blur','#cabinet-api_key', function() {
-    var apiKey = $('#cabinet-api_key').val();
-    
-    var data=JSON.stringify({
-        modelName: "Counterparty",
-        calledMethod: "getCounterparties",
-        apiKey: apiKey,
-        methodProperties: {
-            CounterpartyProperty: "Sender",
-        }
-    })
-});
-JS;
-$this->registerJs($apiKeyCheckRequest, $this::POS_END);
-
-$townChanged =<<<JS
-$(document).on('change', '#cabinet-town', function() {
-  $('#cabinet-dispatch_dep').text("");
-})
-JS;
-$this->registerJs($townChanged, $this::POS_END);
-
-
+$this->registerJsFile('@web/js/apiKeyCheck.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('@web/js/townChanged.js', ['depends' => 'yii\web\YiiAsset']);
 
 $requestData = <<<JS
+
 function(params) {
     var apiKey = $('#cabinet-api_key').val();
     
@@ -109,6 +88,13 @@ function (response, params) {
 }
 JS;
 
+$counterPartySelected = <<<JS
+$(document).on('change', '#cabinet-counterparty', function() {
+  $.cookie()
+})
+JS;
+
+$this->registerJs($counterPartySelected, $this::POS_END);
 ?>
 
 <div class="cabinet-form">
@@ -134,14 +120,14 @@ JS;
 
     <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'counterparty')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-']) ?>
 
-    <?= $form->field($model, 'contact_person')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'contact_person')->dropDownList(getCounterpartyContactPerson($model->api_key, 'f53d4bd1-713e-11eb-8513-b88303659df5'), ['prompt' => '-']) ?>
 
-    <?= $form->field($model, 'recipient_counterparty')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'recipient_counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-']) ?>
 
     <?= $form->field($model, 'town')->widget(\kartik\select2\Select2::class, [
-        'initValueText' => !is_null($model->town) ? $model->town : null,
+        'initValueText' => !is_null($model->town) ? townRefToDescription($model->town, $model->api_key) : null,
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 0,
@@ -158,7 +144,7 @@ JS;
     ]) ?>
 
     <?= $form->field($model, 'dispatch_dep')->widget(\kartik\select2\Select2::class, [
-        'initValueText' => !is_null($model->dispatch_dep) ? $model->dispatch_dep : null,
+        'initValueText' => !is_null($model->dispatch_dep) ? departmentRefToDescription($model->dispatch_dep, $model->api_key) : null,
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 0,
@@ -174,10 +160,8 @@ JS;
         ],
     ]) ?>
 
-    <?= '<pre>' . print_r($apiKeyCheckRequest, true) . '</pre>'; ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success', 'id' => 'saveCabinetButton']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

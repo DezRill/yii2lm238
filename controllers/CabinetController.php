@@ -63,15 +63,7 @@ class CabinetController extends Controller
             return $this->redirect(['delivery-service/view?id=1']);
         }
 
-        $apiData=$this->getDatabyAPI('5427c06765bdcbd4da909b4c0bd86d5e');
-
-        return $this->render('update', [
-            'model' => $model,
-            'counterparties' => $apiData['counterparties']->data['data'],
-            'contactPersons' => $apiData['contactPersons']->data['data'],
-            'towns' => $apiData['towns']->data['data'],
-            'departments' => $apiData['departments']->data['data'],
-        ]);
+        return $this->render('update', ['model' => $model,]);
     }
 
     /**
@@ -102,61 +94,5 @@ class CabinetController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    private function getDatabyAPI($key)
-    {
-        $client=new Client();
-
-        $counterparties = $client->createRequest()
-            ->setFormat(Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $key,
-                'modelName' => 'Counterparty',
-                'calledMethod' => 'getCounterparties',
-                'methodProperties' => ['CounterpartyProperty' => 'Sender'],
-            ])->send();
-
-        $contactPersons = $client->createRequest()
-            ->setFormat(Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $key,
-                'modelName' => 'Counterparty',
-                'calledMethod' => 'getCounterpartyContactPersons',
-                'methodProperties' => ['Ref' => ArrayHelper::getValue($counterparties->data, 'data.0.Ref')],
-            ])->send();
-
-        $towns = $client->createRequest()
-            ->setFormat(Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $key,
-                'modelName' => 'AddressGeneral',
-                'calledMethod' => 'getSettlements',
-                'methodProperties' => ['Warehouse' => 1, 'Page' => 41],
-            ])->send();
-
-        $departments = $client->createRequest()
-            ->setFormat(Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $key,
-                'modelName' => 'AddressGeneral',
-                'calledMethod' => 'getWarehouses',
-                //'methodProperties' => ['CityRef' => ArrayHelper::getValue($towns->data, 'data.0.Ref')],
-                //'methodProperties' => ['CityName' => 'Хмельницький'],
-                'methodProperties' => ['CityRef' => 'db5c88ac-391c-11dd-90d9-001a92567626'],
-            ])->send();
-
-        if ($counterparties->isOk && $contactPersons->isOk)
-            return [
-                'counterparties' => $counterparties,
-                'contactPersons' => $contactPersons,
-                'towns' => $towns,
-                'departments' => $departments,
-        ];
-        else throw new NotFoundHttpException('Ошибка при загрузке страницы');
     }
 }
