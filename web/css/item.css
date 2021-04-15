@@ -1,14 +1,16 @@
 .post-container {
-    margin: 20px 20px 0 0;
+    margin: 20px 20px 20px 20px;
     overflow: auto
 }
 .post-thumb {
-    float: left
+    float: left;
 }
 .post-thumb img {
     display: block;
     border-radius: 8px;
     width: 100px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .post-content {
     margin-left: 120px

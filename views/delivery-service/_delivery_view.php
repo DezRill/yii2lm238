@@ -1,5 +1,7 @@
 <?php
 /** @var $model \app\models\DeliveryService */
+
+$this->registerCssFile("@web/css/item/css", ['depends' => 'yii\web\YiiAsset']);
 ?>
 
 <div class="post-container">

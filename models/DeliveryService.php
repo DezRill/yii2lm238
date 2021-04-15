@@ -55,13 +55,11 @@ class DeliveryService extends \yii\db\ActiveRecord
         ];
     }
 
-    /*public function beforeSave($insert)
+    public function beforeSave($insert)
     {
-        if ($insert)
-        {
-            $fileInfo = UploadedFile::getInstance($this, 'icon');
-            $this->icon=file_get_contents($fileInfo->tempName);
-        }
+       // if ($this->as_default==1){
+            DeliveryService::updateAll(['as_default' => 0], 'as_default = 1');
+        //}
         return parent::beforeSave($insert);
-    }*/
+    }
 }
