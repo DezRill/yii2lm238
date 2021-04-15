@@ -63,7 +63,7 @@ class CabinetController extends Controller
             return $this->redirect(['delivery-service/view?id=1']);
         }
 
-        return $this->render('update', ['model' => $model,]);
+        return $this->render('update', ['model' => $model]);
     }
 
     /**

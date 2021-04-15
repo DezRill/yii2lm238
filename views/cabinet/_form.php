@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 $this->registerJsFile('@web/js/apiKeyCheck.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('@web/js/townChanged.js', ['depends' => 'yii\web\YiiAsset']);
 
-$requestData = <<<JS
+$requestDataTowns = <<<JS
 
 function(params) {
     var apiKey = $('#cabinet-api_key').val();
@@ -30,7 +30,7 @@ function(params) {
 }
 JS;
 
-$resultsJs = <<<JS
+$resultsJsTowns = <<<JS
 function (response, params) {
 
     params.page = params.page || 1;
@@ -50,7 +50,7 @@ function (response, params) {
 }
 JS;
 
-$requestData1 = <<<JS
+$requestDataDepartments = <<<JS
 function(params) {
     var apiKey = $('#cabinet-api_key').val();
     
@@ -68,7 +68,7 @@ function(params) {
 }
 JS;
 
-$resultsJs1 = <<<JS
+$resultsJsDepartments = <<<JS
 function (response, params) {
 
     params.page = params.page || 1;
@@ -87,14 +87,6 @@ function (response, params) {
     };
 }
 JS;
-
-$counterPartySelected = <<<JS
-$(document).on('change', '#cabinet-counterparty', function() {
-  $.cookie()
-})
-JS;
-
-$this->registerJs($counterPartySelected, $this::POS_END);
 ?>
 
 <div class="cabinet-form">
@@ -102,6 +94,10 @@ $this->registerJs($counterPartySelected, $this::POS_END);
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'api_key')->textInput() ?>
+
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
 
     <h5><b><?= Html::encode('Дата окончания действия ключа') ?></b></h5>
     <?= \kartik\date\DatePicker::widget([
@@ -116,18 +112,15 @@ $this->registerJs($counterPartySelected, $this::POS_END);
         ]
     ]) ?><br/>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-', 'disabled' => true]) ?>
 
-    <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'contact_person')->dropDownList(getCounterpartyContactPerson($model->api_key, $model->counterparty), ['prompt' => '-', 'disabled' => true]) ?>
 
-    <?= $form->field($model, 'counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-']) ?>
-
-    <?= $form->field($model, 'contact_person')->dropDownList(getCounterpartyContactPerson($model->api_key, 'f53d4bd1-713e-11eb-8513-b88303659df5'), ['prompt' => '-']) ?>
-
-    <?= $form->field($model, 'recipient_counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-']) ?>
+    <?= $form->field($model, 'recipient_counterparty')->dropDownList(getCounterparties($model->api_key), ['disabled' => true, 'prompt' => '-']) ?>
 
     <?= $form->field($model, 'town')->widget(\kartik\select2\Select2::class, [
         'initValueText' => !is_null($model->town) ? townRefToDescription($model->town, $model->api_key) : null,
+        'options' => ['disabled' => true],
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 0,
@@ -136,8 +129,8 @@ $this->registerJs($counterPartySelected, $this::POS_END);
                 'type' => 'POST',
                 'dataType' => 'json',
                 'delay' => 250,
-                'data' => new JsExpression($requestData),
-                'processResults' => new JsExpression($resultsJs),
+                'data' => new JsExpression($requestDataTowns),
+                'processResults' => new JsExpression($resultsJsTowns),
                 'cache' => true
             ],
         ],
@@ -145,6 +138,7 @@ $this->registerJs($counterPartySelected, $this::POS_END);
 
     <?= $form->field($model, 'dispatch_dep')->widget(\kartik\select2\Select2::class, [
         'initValueText' => !is_null($model->dispatch_dep) ? departmentRefToDescription($model->dispatch_dep, $model->api_key) : null,
+        'options' => ['disabled' => true],
         'pluginOptions' => [
             'allowClear' => true,
             'minimumInputLength' => 0,
@@ -153,15 +147,15 @@ $this->registerJs($counterPartySelected, $this::POS_END);
                 'type' => 'POST',
                 'dataType' => 'json',
                 'delay' => 250,
-                'data' => new JsExpression($requestData1),
-                'processResults' => new JsExpression($resultsJs1),
+                'data' => new JsExpression($requestDataDepartments),
+                'processResults' => new JsExpression($resultsJsDepartments),
                 'cache' => true
             ],
         ],
     ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success', 'id' => 'saveCabinetButton']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success', 'id' => 'saveCabinetButton', 'disabled' => true]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -34,11 +34,12 @@ class Cabinet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['api_key', 'name', 'counterparty', 'contact_person'], 'required'],
+            [['api_key', 'name', 'counterparty', 'contact_person'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['api_key'], 'string'],
             [['date_end'], 'date', 'format' => 'php:Y-m-d'],
             [['name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town'], 'string', 'max' => 55],
             [['dispatch_dep'], 'string', 'max' => 255],
+            [['counterparty', 'contact_person'], 'compare', 'compareValue' => '0', 'operator' => '!=', 'message' => 'Поле не должно быть пустым.']
         ];
     }
 
