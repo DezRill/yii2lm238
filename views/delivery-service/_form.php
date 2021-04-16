@@ -16,10 +16,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'short_name')->textInput(['maxlength' => true])->label('Короткое название') ?>
 
-    <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
+    <?php if ($model->id !== 1) : ?>
+        <?= $form->field($model, 'http_url')->dropDownList(['https://track.ukrposhta.ua/tracking_UA.html?barcode=' => 'Укрпошта', 'https://t.meest-group.com/' => 'Meest Express']) ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'as_default')->dropDownList(['0' => 'Нет', '1' => "Да",])->label('По умолчанию') ?>
+    <?//= $form->field($model, 'as_default')->dropDownList(['0' => 'Нет', '1' => "Да",])->label('По умолчанию') ?>
 
+    <?php if ($model->id !== 1) : ?>
     <?= $form->field($model, 'icon', [
         'options' => [
             'class' => 'hidden'
@@ -37,6 +40,7 @@ use yii\widgets\ActiveForm;
     ]) ?>
     <?= $this->render('_images', ['model' => $model]) ?>
     <?php \yii\bootstrap\Modal::end() ?><br/><br/>
+    <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

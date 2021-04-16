@@ -36,7 +36,7 @@ class Cabinet extends \yii\db\ActiveRecord
         return [
             [['api_key', 'name', 'counterparty', 'contact_person'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['api_key'], 'string'],
-            [['date_end'], 'date', 'format' => 'php:Y-m-d'],
+            [['date_end'], 'date', 'format' => 'yyyy-mm-dd'],
             [['name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town'], 'string', 'max' => 55],
             [['dispatch_dep'], 'string', 'max' => 255],
             [['counterparty', 'contact_person'], 'compare', 'compareValue' => '0', 'operator' => '!=', 'message' => 'Поле не должно быть пустым.']

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\DeliveryService */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['/']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->registerJsFile('@web/js/apiKeyCheck.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('@web/js/counterPartyChanged.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('@web/js/townChanged.js', ['depends' => 'yii\web\YiiAsset']);
 
 $requestDataTowns = <<<JS

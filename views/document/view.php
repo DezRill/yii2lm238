@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Cabinet */
+/* @var $model app\models\Document */
 
-$this->title = 'Редактировать кабинет: ' . $model->name;
+$this->title = 'Накладная №' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['delivery-service/']];
 $this->params['breadcrumbs'][] = ['label' => "Кабинеты", 'url' => ['delivery-service/view', 'id' => 1]];
 $this->params['breadcrumbs'][] = 'Редактировать кабинет';
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = 'Редактировать кабинет';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Накладные', ['document/index', 'apiKey' => $model->api_key], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Накладные', ['index', 'cabinet_id' => $model->id], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Удалить кабинет', ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger',
         'data' => [

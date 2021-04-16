@@ -17,7 +17,7 @@ class DeliveryServiceSearch extends DeliveryService
     {
         return [
             [['id'], 'integer'],
-            [['name', 'short_name', 'icon', 'http_url', 'as_default'], 'safe'],
+            [['name', 'short_name', 'icon', 'http_url'], 'safe'],
         ];
     }
 
@@ -63,8 +63,7 @@ class DeliveryServiceSearch extends DeliveryService
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'short_name', $this->short_name])
             ->andFilterWhere(['like', 'icon', $this->icon])
-            ->andFilterWhere(['like', 'http_url', $this->http_url])
-            ->andFilterWhere(['like', 'as_default', $this->as_default]);
+            ->andFilterWhere(['like', 'http_url', $this->http_url]);
 
         return $dataProvider;
     }

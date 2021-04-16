@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model app\models\DeliveryService */
 
 $this->title = 'Редактировать службу доставки: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['/']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактировать';
 ?>
 <div class="delivery-service-update">
 

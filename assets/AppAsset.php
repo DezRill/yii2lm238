@@ -25,7 +25,9 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/apiKeyCheck.js',
+        'js/counterPartyChanged',
         'js/townChanged.js',
+        'js/jQueryCookies.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

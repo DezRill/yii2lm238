@@ -6,6 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Cabinet */
 
 $this->title = 'Создать кабинет';
+$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['/']];
 $this->params['breadcrumbs'][] = ['label' => 'Кабинеты', 'url' => ['delivery-service/view?id=1']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

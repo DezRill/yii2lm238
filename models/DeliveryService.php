@@ -34,8 +34,8 @@ class DeliveryService extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'short_name', 'http_url', 'icon'], 'required'],
-            [['icon', 'as_default'], 'string'],
+            [['name', 'short_name', 'icon'], 'required'],
+            [['icon'], 'string'],
             [['name', 'short_name', 'http_url'], 'string', 'max' => 55],
         ];
     }
@@ -51,15 +51,6 @@ class DeliveryService extends \yii\db\ActiveRecord
             'short_name' => 'Короткое название',
             'icon' => 'Иконка',
             'http_url' => 'Http Url',
-            'as_default' => 'По умолчанию',
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-       // if ($this->as_default==1){
-            DeliveryService::updateAll(['as_default' => 0], 'as_default = 1');
-        //}
-        return parent::beforeSave($insert);
     }
 }
