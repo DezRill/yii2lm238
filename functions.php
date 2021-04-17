@@ -87,20 +87,5 @@ function getCounterpartyContactPerson($key, $ref)
 
 function getDocumentsList($apiKey, $dateFrom, $dateTo)
 {
-    $client = new Client();
-    $documentsList = $client->createRequest()
-        ->setFormat(Client::FORMAT_JSON)
-        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-        ->setData([
-            'apiKey' => $apiKey,
-            'modelName' => 'InternetDocument',
-            'calledMethod' => 'getDocumentList',
-            'methodProperties' => [
-                'DateTimeFrom' => $dateFrom,
-                'DateTimeTo' => $dateTo,
-                'GetFullList' => 1
-            ]
-        ]);
 
-    return $documentsList->data['data'];
 }

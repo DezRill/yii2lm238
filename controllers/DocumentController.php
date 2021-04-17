@@ -2,17 +2,19 @@
 
 namespace app\controllers;
 
-use app\models\Document;
-use app\widgets\Alert;
-use yii\data\ActiveDataProvider;
+use app\models\document\request\DocumentCreateRequest;
+use app\models\document\request\DocumentListRequest;
+use app\models\document\response\DocumentListResponse;
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 
 class DocumentController extends Controller
 {
     public function actionIndex($apiKey)
     {
-        $model = new Document();
-        return $this->render('index', compact('model'));
+        $getDocumentsList = new DocumentListRequest();
+        $getDocumentsList->apiKey = $apiKey;
+        return $this->render('index', ['getDocumentsList' => $getDocumentsList]);
     }
 
     public function actionView()
@@ -20,9 +22,11 @@ class DocumentController extends Controller
 
     }
 
-    public function actionCreate()
+    public function actionCreate($apiKey)
     {
-
+        $createDocument=new DocumentCreateRequest();
+        $createDocument->apiKey=$apiKey;
+        return $this->render('create', ['createDocument' => $createDocument]);
     }
 
     public function actionUpdate()
@@ -32,6 +36,37 @@ class DocumentController extends Controller
 
     public function actionDelete()
     {
+
+    }
+
+    public function actionGetData()
+    {
+
+        $model = new DocumentListRequest();
+
+        $model->load(\Yii::$app->request->post(), '');
+
+        if ($model->validate()) {
+
+            $items = $model->getDocuments($model->apiKey, $model->dateFrom, $model->dateTo);
+
+            debug($items);
+
+            $dataProvider = new ArrayDataProvider([
+                'allModels'=>$items,
+                'pagination'=>false,
+            ]);
+
+            return $this->renderAjax('grid',[
+                'dataProvider'=>$dataProvider
+            ]);
+
+        } else {
+            return $this->asJson([
+                'success' => false,
+                'errors' => $model->getErrors()
+            ]);
+        }
 
     }
 }

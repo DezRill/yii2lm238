@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Document */
+/* @var $model app\models\DocumentBasic */
 
 $this->title = 'Накладная №' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['delivery-service/']];

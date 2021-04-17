@@ -5,6 +5,7 @@ use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $getDocumentsList app\models\document\request\DocumentListRequest */
 
 $this->title = 'Накладные';
 $this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['delivery-service/']];
@@ -12,10 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => "Кабинеты", 'url' => ['deli
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php $documentSearch=new \app\models\DocumentSearch() ?>
 
     <?php \yii\bootstrap\Modal::begin([
         'id' => 'modal-window',
@@ -26,14 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
         ],
     ]) ?>
-    <?= $this->render('_dateModal', compact('documentSearch')) ?>
+    <?= $this->render('_dateModal', ['getDocumentList' => $getDocumentsList]) ?>
     <?php \yii\bootstrap\Modal::end() ?>
-    <?= Html::a('Создать накладную', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Создать накладную', ['create', 'apiKey' => $getDocumentsList->apiKey], ['class' => 'btn btn-success']) ?>
 
-    <? /*=
-    ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemView' => '_document_item',
-    ]);
-    */ ?>
+    <div id="content" class="hidden"></div>
 </div>
