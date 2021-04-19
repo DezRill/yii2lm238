@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
         ],
     ]) ?>
-    <?= $this->render('_dateModal', ['getDocumentList' => $getDocumentsList]) ?>
+    <?= $this->render('_dateModal', ['getDocumentsList' => $getDocumentsList]) ?>
     <?php \yii\bootstrap\Modal::end() ?>
     <?= Html::a('Создать накладную', ['create', 'apiKey' => $getDocumentsList->apiKey], ['class' => 'btn btn-success']) ?>
 

@@ -32,40 +32,37 @@ $this->registerJs($js);
 ?>
 
 <div class="document-search-form">
-    <?php $form = ActiveForm::begin() ?>
+    <?php $form = ActiveForm::begin(['id' => 'activeForm']) ?>
 
-    <?=Html::hiddenInput('apiKey',$getDocumentsList->apiKey,['class'=>'form-control'])?>
-    <p>
-    <h4><b><?= Html::encode('Дата от') ?></b></h4>
-    <?= \kartik\date\DatePicker::widget([
+    <?= $form->field($getDocumentsList, 'apiKey', [
+        'options' => [
+            'class' => 'hidden'
+        ]
+    ])->hiddenInput(); ?>
+
+    <?= $form->field($getDocumentsList, 'dateFrom')->widget(\kartik\date\DatePicker::class, [
         'model' => $getDocumentsList,
-        'id' => 'dateFrom',
         'attribute' => 'dateFrom',
-        'name' => 'dateFrom',
         'value' => $getDocumentsList->dateFrom,
+        'name' => 'dateFrom',
         'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
         'pluginOptions' => [
             'autoclose' => true,
             'format' => 'dd.mm.yyyy',
         ]
-    ]) ?>
-    </p>
+    ])->label('Дата от') ?>
 
-    <p>
-    <h4><b><?= Html::encode('Дата до') ?></b></h4>
-    <?= \kartik\date\DatePicker::widget([
+    <?= $form->field($getDocumentsList, 'dateTo')->widget(\kartik\date\DatePicker::class, [
         'model' => $getDocumentsList,
-        'id' => 'dateTo',
         'attribute' => 'dateTo',
-        'name' => 'dateTo',
         'value' => $getDocumentsList->dateTo,
+        'name' => 'dateTo',
         'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
         'pluginOptions' => [
             'autoclose' => true,
             'format' => 'dd.mm.yyyy',
         ]
-    ]) ?>
-    </p>
+    ])->label('Дата до') ?>
 
     <div class="form-group" align="center">
         <?= Html::button('Применить', ['class' => 'btn btn-success', 'id' => 'acceptButton']) ?>

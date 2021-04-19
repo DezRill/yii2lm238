@@ -100,8 +100,7 @@ JS;
 
     <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
 
-    <h5><b><?= Html::encode('Дата окончания действия ключа') ?></b></h5>
-    <?= \kartik\date\DatePicker::widget([
+    <?= $form->field($model, 'date_end')->widget(\kartik\date\DatePicker::class, [
         'model' => $model,
         'attribute' => 'date_end',
         'name' => 'datePicker',
@@ -111,7 +110,7 @@ JS;
             'autoclose' => true,
             'format' => 'yyyy-mm-dd',
         ]
-    ]) ?><br/>
+    ])->label('Дата окончания действия ключа') ?>
 
     <?= $form->field($model, 'counterparty')->dropDownList(getCounterparties($model->api_key), ['prompt' => '-', 'disabled' => true]) ?>
 

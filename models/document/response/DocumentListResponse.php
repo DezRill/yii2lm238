@@ -18,4 +18,8 @@ class DocumentListResponse extends DocumentBigOnesBasic
     public $afterpaymentOnGoodsCost;    // Обратная доставка
     public $packingNumber;              // Номер упаковки
     public $rejectionReason;            // Описание причины неразвоза
+    public $citySenderDescription;
+    public $senderAddressDescription;
+    public $cityRecipientDescription;
+    public $recipientAddressDescription;
 }

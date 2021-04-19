@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'u
 $this->params['breadcrumbs'][] = ['label' => 'Кабинеты', 'url' => ['delivery-service/view?id=1']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cabinet-create">
+<div class="document-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

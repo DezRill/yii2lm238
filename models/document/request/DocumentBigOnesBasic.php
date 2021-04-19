@@ -16,15 +16,6 @@ class DocumentBigOnesBasic extends DocumentBasic
     public $senderAddress;      // Идентификатор адреса отправителя
     public $cityRecipient;      // Идентификатор города получателя
     public $recipientAddress;   // Идентификатор адреса получателя
-
-    public function rules()
-    {
-        return [
-            [['payerType', 'paymentMethod', 'dateTime', 'cargoType', 'weight', 'seatsAmount', 'cost', 'citySender',
-                'senderAddress', 'cityRecipient', 'recipientAddress'], 'required', 'message' => 'Поле не должно быть пустым'],
-            [['weight'], 'type' => 'double', 'message' => 'Только числа'],
-            [['seatsAmount', 'cost'], 'integer', 'message' => 'Только целые числа'],
-            [['description'], 'string', 'max' => 50],
-        ];
-    }
+    public $senderPhone;        // Номер телефона отправителя
+    public $recipientPhone;     // Номер телефона получателя
 }

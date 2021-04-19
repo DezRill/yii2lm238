@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Создать накладную';
 $this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['/']];
 $this->params['breadcrumbs'][] = ['label' => 'Кабинеты', 'url' => ['delivery-service/view?id=1']];
-$this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['document/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['document/index', 'apiKey' => $createDocument->apiKey]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cabinet-create">
@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $createDocument,
+        'createDocument' => $createDocument,
     ]) ?>
 
+    <div id="content" class="hidden"></div>
 </div>

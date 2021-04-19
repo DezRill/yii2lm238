@@ -85,7 +85,41 @@ function getCounterpartyContactPerson($key, $ref)
     return $counterpartyContactPersonArray;
 }
 
-function getDocumentsList($apiKey, $dateFrom, $dateTo)
+/*function getCity($key, $ref)
 {
+    $client = new Client();
 
+    $senderCity=$client->createRequest()
+        ->setFormat(Client::FORMAT_JSON)
+        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
+        ->setData([
+            'apiKey' => $key,
+            'modelName' => 'Address',
+            'calledMethod' => 'getCities',
+            'methodProperties' => [
+                'Ref' => $ref
+            ]
+        ])->send();
+
+    return ArrayHelper::getValue($senderCity->data, 'data.0.Description');
 }
+
+function getAddress($key, $ref)
+{
+    $client = new Client();
+
+    $senderAddress=$client->createRequest()
+        ->setFormat(Client::FORMAT_JSON)
+        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
+        ->setData([
+            'apiKey' => $key,
+            'modelName' => 'Address',
+            'calledMethod' => 'getWarehouses',
+            'methodProperties' => [
+                'CityRef' => $ref
+            ]
+        ])->send();
+
+    //return ArrayHelper::getValue($senderAddress->data, 'data.0');
+    return $senderAddress->data;
+}*/

@@ -34,7 +34,7 @@ class Cabinet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['api_key', 'name', 'counterparty', 'contact_person'], 'required', 'message' => 'Поле не должно быть пустым'],
+            [['api_key', 'name', 'counterparty', 'contact_person', 'date_end'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['api_key'], 'string'],
             [['date_end'], 'date', 'format' => 'yyyy-mm-dd'],
             [['name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town'], 'string', 'max' => 55],

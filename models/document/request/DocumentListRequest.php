@@ -41,7 +41,7 @@ class DocumentListRequest extends DocumentBasic
                 ]
             ])->send();
 
-        /*$documentsList=$client->createRequest()
+        /*$documentsList = $client->createRequest()
             ->setFormat(Client::FORMAT_JSON)
             ->setUrl('https://api.novaposhta.ua/v2.0/json/')
             ->setData([
@@ -50,39 +50,70 @@ class DocumentListRequest extends DocumentBasic
                 'calledMethod' => 'getStatusDocuments',
                 'methodProperties' => [
                     'Documents' => [
-                        ['DocumentNumber' => '20450375811493'],
-                        ['DocumentNumber' => '20450375760190'],
+                        [
+                            'DocumentNumber' => '20450375811493',
+                            'Phone' => '+380970951279',
+                        ],
+                        [
+                            'DocumentNumber' => '20450375760190',
+                            'Phone' => '+380970951279',
+                        ],
                     ]
                 ]
             ])->send();*/
 
-        /*$items[] = new DocumentListResponse();
-        foreach ($documentsList->data['data'] as $item)
-        {
-            $modelItem=new DocumentListResponse();
+        $items[] = new DocumentListResponse();
+        foreach ($documentsList->data['data'] as $item) {
+            $modelItem = new DocumentListResponse();
 
-            $modelItem->ref=$item['Ref'];
-            $modelItem->dateTime=$item['DateTime'];
-            $modelItem->prefferedDeliveryDate=$item['PrefferedDeliveryDate'];
-            $modelItem->weight=$item['Weight'];
-            $modelItem->seatsAmount=$item['SeatsAmount'];
-            $modelItem->intDocNumber=$item['IntDocNumber'];
-            $modelItem->cost=$item['Cost'];
-            $modelItem->citySender=$item['CitySender'];
-            $modelItem->cityRecipient=$item['CityRecipient'];
-            $modelItem->senderAddress=$item['SenderAddress'];
-            $modelItem->recipientAddress=$item['RecipientAddress'];
-            $modelItem->costOnSite=$item['CostOnSite'];
-            $modelItem->payerType=$item['PayerType'];
-            $modelItem->paymentMethod=$item['PaymentMethod'];
-            $modelItem->afterpaymentOnGoodsCost=$item['AfterpaymentOnGoodsCost'];
-            $modelItem->packingNumber=$item['PackingNumber'];
-            $modelItem->rejectionReason=$item['RejectedReason'];
+            if ($item['Ref'] !== null) {
+                $modelItem->ref = $item['Ref'];
+                $modelItem->dateTime = $item['DateTime'];
+                $modelItem->prefferedDeliveryDate = $item['PrefferedDeliveryDate'];
+                $modelItem->weight = $item['Weight'] . ' кг';
+                $modelItem->seatsAmount = $item['SeatsAmount'];
+                $modelItem->intDocNumber = $item['IntDocNumber'];
+                $modelItem->cost = $item['Cost'] . ' грн';
+                $modelItem->citySender = $item['CitySender'];
+                $modelItem->cityRecipient = $item['CityRecipient'];
+                $modelItem->senderAddress = $item['SenderAddress'];
+                $modelItem->recipientAddress = $item['RecipientAddress'];
+                $modelItem->citySenderDescription = $item['CitySenderDescription'];
+                $modelItem->cityRecipientDescription = $item['CityRecipientDescription'];
+                $modelItem->senderAddressDescription = $item['SenderAddressDescription'];
+                $modelItem->recipientAddressDescription = $item['RecipientAddressDescription'];
+                $modelItem->costOnSite = $item['CostOnSite'] . ' грн';
+                $modelItem->payerType = $item['PayerType'];
+                $modelItem->paymentMethod = $item['PaymentMethod'];
+                $modelItem->afterpaymentOnGoodsCost = $item['AfterpaymentOnGoodsCost'];
+                $modelItem->packingNumber = $item['PackingNumber'];
+                $modelItem->rejectionReason = $item['RejectedReason'];
+            }
 
-            array_push($items,$modelItem);
+            if ($modelItem->prefferedDeliveryDate == null) $modelItem->prefferedDeliveryDate = 'Ожидание посылки от отправителя...';
+            switch ($modelItem->payerType) {
+                case 'Recipient':
+                    $modelItem->payerType = 'Получатель';
+                    break;
+                case 'Sender':
+                    $modelItem->payerType = 'Отправитель';
+                    break;
+                case 'ThirdPerson':
+                    $modelItem->payerType = 'Третье лицо';
+                    break;
+            }
+            switch ($modelItem->paymentMethod) {
+                case 'Cash':
+                    $modelItem->paymentMethod = 'Наличный расчёт';
+                    break;
+                case 'NonCash':
+                    $modelItem->paymentMethod = 'Безналичный расчёт';
+                    break;
+            }
+            array_push($items, $modelItem);
         }
-        return $items;*/
 
-        return $documentsList->data;
+        array_shift($items);
+        return $items;
     }
 }

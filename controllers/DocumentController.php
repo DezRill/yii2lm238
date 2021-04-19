@@ -4,8 +4,8 @@ namespace app\controllers;
 
 use app\models\document\request\DocumentCreateRequest;
 use app\models\document\request\DocumentListRequest;
-use app\models\document\response\DocumentListResponse;
 use yii\data\ArrayDataProvider;
+use yii\httpclient\Client;
 use yii\web\Controller;
 
 class DocumentController extends Controller
@@ -24,8 +24,8 @@ class DocumentController extends Controller
 
     public function actionCreate($apiKey)
     {
-        $createDocument=new DocumentCreateRequest();
-        $createDocument->apiKey=$apiKey;
+        $createDocument = new DocumentCreateRequest();
+        $createDocument->apiKey = $apiKey;
         return $this->render('create', ['createDocument' => $createDocument]);
     }
 
@@ -34,39 +34,62 @@ class DocumentController extends Controller
 
     }
 
-    public function actionDelete()
+    public function actionDelete($apiKey, $ref)
     {
+        $client = new Client();
 
+        $delete = $client->createRequest()
+            ->setFormat(\yii\httpclient\Client::FORMAT_JSON)
+            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
+            ->setData([
+                'apiKey' => $apiKey,
+                'modelName' => 'InternetDocument',
+                'calledMethod' => 'delete',
+                'methodProperties' => [
+                    'DocumentRefs' => $ref
+                ]
+            ])->send();
+
+        return $this->redirect(['index', 'apiKey' => $apiKey]);
     }
 
     public function actionGetData()
     {
-
         $model = new DocumentListRequest();
 
-        $model->load(\Yii::$app->request->post(), '');
+        if ($model->load(\Yii::$app->request->post())) {
 
-        if ($model->validate()) {
+            if ($model->validate()) {
 
-            $items = $model->getDocuments($model->apiKey, $model->dateFrom, $model->dateTo);
+                $items = $model->getDocuments();
 
-            debug($items);
+                $dataProvider = new ArrayDataProvider([
+                    'allModels' => $items,
+                    'pagination' => false,
+                ]);
 
-            $dataProvider = new ArrayDataProvider([
-                'allModels'=>$items,
-                'pagination'=>false,
-            ]);
+                return $this->renderAjax('grid', [
+                    'dataProvider' => $dataProvider,
+                    'api' => $model->apiKey,
+                ]);
 
-            return $this->renderAjax('grid',[
-                'dataProvider'=>$dataProvider
-            ]);
-
-        } else {
-            return $this->asJson([
-                'success' => false,
-                'errors' => $model->getErrors()
-            ]);
+            } else {
+                return $this->asJson([
+                    'success' => false,
+                    'errors' => $model->getErrors()
+                ]);
+            }
         }
+    }
 
+    public function actionSendData()
+    {
+        $model = new DocumentCreateRequest();
+
+        if ($model->load(\Yii::$app->request->post())) {
+            if ($model->validate()) {
+                $model->sendData();
+            }
+        }
     }
 }
