@@ -11,13 +11,13 @@ namespace app\models\document\request;
 
 use yii\httpclient\Client;
 
-class DocumentCreateRequest extends DocumentBigOnesBasic
+class DocumentCreateRequest extends DocumentBasic
 {
+    public $sender;
+    public $contactSender;
+    public $sendersPhone;
     public $serviceType;        // Значение из справочника Технология доставки
     public $description;        // Текстовое поле, вводится для доп. описания
-    public $sender;             // Идентификатор отправителя
-    public $contactSender;      // Идентификатор контактного лица отправителя
-    public $sendersPhone;       // Телефон отправителя в формате: +380660000000, 380660000000, 0660000000
     public $recipient;          // Идентификатор получателя
     public $contactRecipient;   // Идентификатор контактного лица получателя
     public $recipientsPhone;    // Телефон получателя в формате: +380660000000, 80660000000, 0660000000
@@ -28,9 +28,33 @@ class DocumentCreateRequest extends DocumentBigOnesBasic
     public function rules()
     {
         return [
-            [['apiKey', 'payerType', 'paymentMethod', 'dateTime', 'cargoType', 'weight', 'seatsAmount', 'cost', 'citySender', 'senderPhone', 'recipientPhone',
-                'senderAddress', 'cityRecipient', 'recipientAddress', 'serviceType', 'description', 'sender', 'contactSender', 'senderPhone', 'recipient',
-                'contactRecipient', 'recipientPhone', 'volumetricWidth', 'volumetricLength', 'volumetricHeight'], 'required', 'message' => 'Поле не должно быть пустым'],
+            [
+                [
+                    'apiKey',
+                    'payerType',
+                    'paymentMethod',
+                    'dateTime',
+                    'cargoType',
+                    'weight',
+                    'seatsAmount',
+                    'cost',
+                    'recipientPhone',
+                    'cityRecipient',
+                    'recipientAddress',
+                    'serviceType', 'description',
+                    'recipient',
+                    'contactRecipient',
+                    'recipientPhone',
+                    'volumetricWidth',
+                    'volumetricLength',
+                    'volumetricHeight',
+                    'sender',
+                    'contactSender',
+                    'sendersPhone',
+                ],
+                'required',
+                'message' => 'Поле не должно быть пустым'
+            ],
             [['volumetricWidth', 'volumetricLength', 'volumetricHeight', 'weight'], 'double', 'message' => 'Только числа'],
             [['seatsAmount', 'cost'], 'integer', 'message' => 'Только целые числа'],
             [['description'], 'string', 'max' => 50],

@@ -2,19 +2,27 @@
 
 namespace app\controllers;
 
+use app\models\Cabinet;
 use app\models\document\request\DocumentCreateRequest;
 use app\models\document\request\DocumentListRequest;
 use yii\data\ArrayDataProvider;
 use yii\httpclient\Client;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class DocumentController extends Controller
 {
-    public function actionIndex($apiKey)
+    public function actionIndex($id)
     {
+        $cabinet = Cabinet::findOne($id);
+
+        if (empty($cabinet)) {
+            throw new NotFoundHttpException();
+        }
+
         $getDocumentsList = new DocumentListRequest();
-        $getDocumentsList->apiKey = $apiKey;
-        return $this->render('index', ['getDocumentsList' => $getDocumentsList]);
+        $getDocumentsList->apiKey = $cabinet->api_key;
+        return $this->render('index', ['getDocumentsList' => $getDocumentsList, 'cabinet' => $cabinet]);
     }
 
     public function actionView()
@@ -22,11 +30,22 @@ class DocumentController extends Controller
 
     }
 
-    public function actionCreate($apiKey)
+    public function actionCreate($id)
     {
-        $createDocument = new DocumentCreateRequest();
-        $createDocument->apiKey = $apiKey;
-        return $this->render('create', ['createDocument' => $createDocument]);
+        $cabinet = Cabinet::findOne($id);
+
+        if (empty($cabinet)) {
+            throw new NotFoundHttpException();
+        }
+
+        $createDocument = new DocumentCreateRequest([
+            'dateTime' => date('d.m.Y'),
+            'apiKey' => $cabinet->api_key,
+            'citySender' => townRefToDescription($cabinet->town, $cabinet->api_key),
+            'senderAddress' => departmentRefToDescription($cabinet->dispatch_dep, $cabinet->api_key),
+        ]);
+
+        return $this->render('create', ['createDocument' => $createDocument, 'cabinet' => $cabinet]);
     }
 
     public function actionUpdate()

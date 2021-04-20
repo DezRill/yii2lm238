@@ -8,7 +8,7 @@ use \yii\helpers\Html;
 /* @var $form yii\widgets\ActiveForm */
 
 $js = <<<JS
-$(document).on('click', '#acceptButton', function() {
+$(document).on('click', '#acceptButtonDocument', function() {
   var modal_window = $('#modal-window');
   var sendData = modal_window.find('.form-control').serialize();
   var content  = $(document).find("#content");
@@ -65,7 +65,7 @@ $this->registerJs($js);
     ])->label('Дата до') ?>
 
     <div class="form-group" align="center">
-        <?= Html::button('Применить', ['class' => 'btn btn-success', 'id' => 'acceptButton']) ?>
+        <?= Html::button('Применить', ['class' => 'btn btn-success', 'id' => 'acceptButtonDocument']) ?>
     </div>
 
     <?php ActiveForm::end() ?>

@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $createDocument app\models\document\request\DocumentCreateRequest */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $cabinet app\models\Cabinet */
 
 $requestSenderCity = <<<JS
 
@@ -201,32 +202,26 @@ $cargoTypeArray = [
     'Parcel' => 'Посылка',
 ];
 $serviceTypeArray = [
-    'DoorsDoors' => 'Дверь-Дверь',
-    'DoorsWarehouse' => 'Дверь-Склад',
     'WarehouseWarehouse' => 'Склад-Склад',
     'WarehouseDoors' => 'Склад-Дверь',
 ];
-
-//$senderArray = getCounterparties($createDocument->apiKey);
-
-//$contactSenderArray = \yii\helpers\ArrayHelper::getValue($senderArray, '0.Ref');
 ?>
 
 <div class="document-form">
 
+    <?php
+    $createDocument->sender=$cabinet->counterparty;
+    $createDocument->contactSender=$cabinet->contact_person;
+    ?>
+
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($createDocument, 'apiKey', ['options' => ['class' => 'hidden']])->hiddenInput() ?>
-
-    <?= $form->field($createDocument, 'payerType')->dropDownList($payerTypeArray)->label('Плательщик') ?>
-
-    <?= $form->field($createDocument, 'paymentMethod')->dropDownList($paymentMethodArray)->label('Форма оплаты') ?>
+    <?= $form->field($cabinet, 'api_key', ['options' => ['class' => 'hidden', 'id' => 'apiKey']])->hiddenInput() ?>
 
     <?= $form->field($createDocument, 'dateTime')->widget(\kartik\date\DatePicker::class, [
         'model' => $createDocument,
         'attribute' => 'dateTime',
         'name' => 'dateTime',
-        'value' => $createDocument->dateTime,
         'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
         'pluginOptions' => [
             'autoclose' => true,
@@ -234,7 +229,45 @@ $serviceTypeArray = [
         ]
     ])->label('Дата отправки') ?>
 
-    <?= $form->field($createDocument, 'cargoType')->dropDownList($cargoTypeArray) ?>
+    <?= $form->field($createDocument, 'citySender')->widget(\kartik\select2\Select2::class, [
+        'initValueText' => townRefToDescription($cabinet->town, $cabinet->api_key),
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 0,
+            'ajax' => [
+                'url' => "https://api.novaposhta.ua/v2.0/json/",
+                'type' => 'POST',
+                'dataType' => 'json',
+                'delay' => 250,
+                'data' => new JsExpression($requestSenderCity),
+                'processResults' => new JsExpression($resultsSenderCity),
+                'cache' => true
+            ],
+        ],
+    ])->label('Город') ?>
+
+    <?= $form->field($createDocument, 'senderAddress')->widget(\kartik\select2\Select2::class, [
+        'initValueText' => departmentRefToDescription($cabinet->dispatch_dep, $cabinet->api_key),
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 0,
+            'ajax' => [
+                'url' => "https://api.novaposhta.ua/v2.0/json/",
+                'type' => 'POST',
+                'dataType' => 'json',
+                'delay' => 250,
+                'data' => new JsExpression($requestSenderAddress),
+                'processResults' => new JsExpression($resultsSenderAddress),
+                'cache' => true
+            ],
+        ],
+    ])->label('Отделение') ?>
+
+    <?= $form->field($createDocument, 'payerType')->dropDownList($payerTypeArray)->label('Плательщик') ?>
+
+    <?= $form->field($createDocument, 'paymentMethod')->dropDownList($paymentMethodArray)->label('Форма оплаты') ?>
+
+    <?= $form->field($createDocument, 'cargoType')->dropDownList($cargoTypeArray)->label('Тип груза') ?>
 
     <?= $form->field($createDocument, 'volumetricWidth')->textInput()->label('Ширина') ?>
 
@@ -251,46 +284,6 @@ $serviceTypeArray = [
     <?= $form->field($createDocument, 'description')->textInput()->label('Описание груза') ?>
 
     <?= $form->field($createDocument, 'cost')->textInput()->label('Объявленная стоимость') ?>
-
-    <?= $form->field($createDocument, 'citySender')->widget(\kartik\select2\Select2::class, [
-        'initValueText' => null,
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 0,
-            'ajax' => [
-                'url' => "https://api.novaposhta.ua/v2.0/json/",
-                'type' => 'POST',
-                'dataType' => 'json',
-                'delay' => 250,
-                'data' => new JsExpression($requestSenderCity),
-                'processResults' => new JsExpression($resultsSenderCity),
-                'cache' => true
-            ],
-        ],
-    ])->label('Город отправителя') ?>
-
-    <? //= $form->field($createDocument, 'sender')->dropDownList($senderArray)->label('Отправитель') ?>
-
-    <?= $form->field($createDocument, 'sender')->textInput()->label('Отправитель') ?>
-
-    <?= $form->field($createDocument, 'senderAddress')->widget(\kartik\select2\Select2::class, [
-        'initValueText' => null,
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 0,
-            'ajax' => [
-                'url' => "https://api.novaposhta.ua/v2.0/json/",
-                'type' => 'POST',
-                'dataType' => 'json',
-                'delay' => 250,
-                'data' => new JsExpression($requestSenderAddress),
-                'processResults' => new JsExpression($resultsSenderAddress),
-                'cache' => true
-            ],
-        ],
-    ])->label('Адрес отправителя') ?>
-
-    <? //= $form->field($createDocument, 'contactSender')->dropDownList($contactSenderArray)->label('Контактное лицо отправителя') ?>
 
     <?= $form->field($createDocument, 'contactSender')->textInput()->label('Контактное лицо отправителя') ?>
 

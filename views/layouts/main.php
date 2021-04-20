@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -11,6 +12,14 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+$js = <<<JS
+$(document).on('click', '#showModal', function() {
+    $('#modalWindow').modal('show');
+})
+JS;
+$this->registerJs($js)
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,6 +35,16 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
+<?php
+\yii\bootstrap\Modal::begin([
+    'id' => 'modalWindow',
+    'header' => '<h2>Выберите кабинет</h2>'
+]);
+$model=\app\models\Cabinet::find()->all();
+echo $this->render('_cabinetChoose', ['model' => $model]);
+\yii\bootstrap\Modal::end();
+?>
+
 <div class="wrap">
     <?php
     NavBar::begin([
@@ -39,10 +58,11 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Службы доставки', 'url' => ['/delivery-service/index']],
-            ['label' => 'Yii главная', 'url' => ['/site/index']],
-            ['label' => 'Про нас', 'url' => ['/site/about']],
-            ['label' => 'Связаться с нами', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
+            ['label' => 'Журнал деклараций доставки', 'options' => ['id' => 'showModal']],
+            //['label' => 'Yii главная', 'url' => ['/site/index']],
+            //['label' => 'Про нас', 'url' => ['/site/about']],
+            //['label' => 'Связаться с нами', 'url' => ['/site/contact']],
+            /*Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
@@ -53,7 +73,7 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
-            )
+            )*/
         ],
     ]);
     NavBar::end();

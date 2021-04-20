@@ -9,7 +9,7 @@
 namespace app\models\document\request;
 
 
-class DocumentUpdateRequest extends DocumentBigOnesBasic
+class DocumentUpdateRequest extends DocumentBasic
 {
     public $volumeGeneral;      // Объем общий, м.куб (min - 0.0004), обязательно для заполнения, если не указаны значения OptionsSeat
     public $serviceType;        // Значение из справочника Технология доставки
