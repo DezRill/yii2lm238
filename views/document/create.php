@@ -17,6 +17,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'createDocument' => $createDocument,
         'cabinet' => $cabinet,
     ]) ?>
-
-    <div id="content" class="hidden"></div>
 </div>

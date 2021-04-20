@@ -26,5 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php \yii\bootstrap\Modal::end() ?>
     <?= Html::a('Создать накладную', ['create', 'id' => $cabinet->id], ['class' => 'btn btn-success']) ?>
 
+    <?= debug(getTestDocuments($getDocumentsList->apiKey)) ?>
+
     <div id="content" class="hidden"></div>
 </div>

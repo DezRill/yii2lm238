@@ -41,8 +41,11 @@ class DocumentController extends Controller
         $createDocument = new DocumentCreateRequest([
             'dateTime' => date('d.m.Y'),
             'apiKey' => $cabinet->api_key,
-            'citySender' => townRefToDescription($cabinet->town, $cabinet->api_key),
-            'senderAddress' => departmentRefToDescription($cabinet->dispatch_dep, $cabinet->api_key),
+            'citySender' => $cabinet->town,
+            'senderAddress' => $cabinet->dispatch_dep,
+            'sender' => $cabinet->counterparty,
+            'contactSender' => $cabinet->contact_person,
+            'sendersPhone' => '+' . getPhone($cabinet->api_key, $cabinet->counterparty),
         ]);
 
         return $this->render('create', ['createDocument' => $createDocument, 'cabinet' => $cabinet]);
@@ -105,10 +108,13 @@ class DocumentController extends Controller
     {
         $model = new DocumentCreateRequest();
 
-        if ($model->load(\Yii::$app->request->post())) {
-            if ($model->validate()) {
-                $model->sendData();
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            $response = $model->sendData();
+            if ($response['success'])
+            {
+
             }
+            debug($response);
         }
     }
 }

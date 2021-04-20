@@ -11,16 +11,14 @@ namespace app\models\document\request;
 
 use yii\httpclient\Client;
 
-class DocumentCreateRequest extends DocumentBasic
+class DocumentCreateRequest extends DocumentBigOneBasic
 {
     public $sender;
     public $contactSender;
-    public $sendersPhone;
     public $serviceType;        // Значение из справочника Технология доставки
     public $description;        // Текстовое поле, вводится для доп. описания
     public $recipient;          // Идентификатор получателя
     public $contactRecipient;   // Идентификатор контактного лица получателя
-    public $recipientsPhone;    // Телефон получателя в формате: +380660000000, 80660000000, 0660000000
     public $volumetricWidth;    // Дирина, в см
     public $volumetricLength;   // Длина, в см            //Объёмный вес по формуле (длина*ширина*высота)/4000
     public $volumetricHeight;   // Высота, в см
@@ -38,19 +36,21 @@ class DocumentCreateRequest extends DocumentBasic
                     'weight',
                     'seatsAmount',
                     'cost',
-                    'recipientPhone',
+                    'recipientsPhone',
                     'cityRecipient',
                     'recipientAddress',
-                    'serviceType', 'description',
+                    'serviceType',
+                    'description',
                     'recipient',
                     'contactRecipient',
-                    'recipientPhone',
                     'volumetricWidth',
                     'volumetricLength',
                     'volumetricHeight',
                     'sender',
                     'contactSender',
                     'sendersPhone',
+                    'citySender',
+                    'senderAddress',
                 ],
                 'required',
                 'message' => 'Поле не должно быть пустым'
@@ -58,6 +58,7 @@ class DocumentCreateRequest extends DocumentBasic
             [['volumetricWidth', 'volumetricLength', 'volumetricHeight', 'weight'], 'double', 'message' => 'Только числа'],
             [['seatsAmount', 'cost'], 'integer', 'message' => 'Только целые числа'],
             [['description'], 'string', 'max' => 50],
+            [['recipientsPhone'], 'string', 'length' => 13],
         ];
     }
 
@@ -100,6 +101,6 @@ class DocumentCreateRequest extends DocumentBasic
                 ]
             ])->send();
 
-        debug($sendData->data);
+        return $sendData->data;
     }
 }

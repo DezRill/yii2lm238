@@ -9,7 +9,7 @@
 namespace app\models\document\response;
 
 
-class DocumentListResponse extends DocumentBigOnesBasic
+class DocumentListResponse extends DocumentBasic
 {
     public $ref;                        // Идентификатор ЭН
     public $prefferedDeliveryDate;      // Желаемая дата доставки

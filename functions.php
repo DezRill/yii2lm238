@@ -85,41 +85,49 @@ function getCounterpartyContactPerson($key, $ref)
     return $counterpartyContactPersonArray;
 }
 
-/*function getCity($key, $ref)
+function getPhone($key, $ref)
 {
     $client = new Client();
 
-    $senderCity=$client->createRequest()
+    $request = $client->createRequest()
         ->setFormat(Client::FORMAT_JSON)
         ->setUrl('https://api.novaposhta.ua/v2.0/json/')
         ->setData([
             'apiKey' => $key,
-            'modelName' => 'Address',
-            'calledMethod' => 'getCities',
-            'methodProperties' => [
-                'Ref' => $ref
-            ]
+            'modelName' => 'Counterparty',
+            'calledMethod' => 'getCounterpartyContactPersons',
+            'methodProperties' => ['Ref' => $ref]
         ])->send();
 
-    return ArrayHelper::getValue($senderCity->data, 'data.0.Description');
+    $phone = ArrayHelper::getValue($request->data, 'data.0.Phones');
+    return $phone;
 }
 
-function getAddress($key, $ref)
+function getTestDocuments($apiKey)
 {
     $client = new Client();
 
-    $senderAddress=$client->createRequest()
+    $documents = $client->createRequest()
         ->setFormat(Client::FORMAT_JSON)
         ->setUrl('https://api.novaposhta.ua/v2.0/json/')
         ->setData([
-            'apiKey' => $key,
-            'modelName' => 'Address',
-            'calledMethod' => 'getWarehouses',
+            'apiKey' => $apiKey,
+            'modelName' => 'TrackingDocument',
+            'calledMethod' => 'getStatusDocuments',
             'methodProperties' => [
-                'CityRef' => $ref
+                'Documents' =>
+                    [
+                        [
+                            'DocumentNumber' => '20450376523172',
+                            'Phone' => '380970951279',
+                        ],
+                        [
+                            'DocumentNumber' => '20450376429647',
+                            'Phone' => '380970951279',
+                        ],
+                    ]
             ]
         ])->send();
 
-    //return ArrayHelper::getValue($senderAddress->data, 'data.0');
-    return $senderAddress->data;
-}*/
+    return $documents->data;
+}

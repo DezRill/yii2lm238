@@ -6,7 +6,7 @@ use app\models\Cabinet;
 use app\models\document\response\DocumentListResponse;
 use yii\httpclient\Client;
 
-class DocumentListRequest extends DocumentBasic
+class DocumentListRequest extends DocumentBigOneBasic
 {
     public $dateFrom;
     public $dateTo;
@@ -40,27 +40,6 @@ class DocumentListRequest extends DocumentBasic
                     'GetFullList' => 1
                 ]
             ])->send();
-
-        /*$documentsList = $client->createRequest()
-            ->setFormat(Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $this->apiKey,
-                'modelName' => 'TrackingDocument',
-                'calledMethod' => 'getStatusDocuments',
-                'methodProperties' => [
-                    'Documents' => [
-                        [
-                            'DocumentNumber' => '20450375811493',
-                            'Phone' => '+380970951279',
-                        ],
-                        [
-                            'DocumentNumber' => '20450375760190',
-                            'Phone' => '+380970951279',
-                        ],
-                    ]
-                ]
-            ])->send();*/
 
         $items[] = new DocumentListResponse();
         foreach ($documentsList->data['data'] as $item) {
