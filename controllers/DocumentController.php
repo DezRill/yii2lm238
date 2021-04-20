@@ -2,113 +2,126 @@
 
 namespace app\controllers;
 
-use app\models\Cabinet;
-use app\models\document\request\DocumentCreateRequest;
-use app\models\document\request\DocumentListRequest;
-use yii\data\ArrayDataProvider;
-use yii\httpclient\Client;
+use Yii;
+use app\models\Document;
+use app\models\DocumentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
+/**
+ * DocumentController implements the CRUD actions for Document model.
+ */
 class DocumentController extends Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Document models.
+     * @return mixed
+     */
     public function actionIndex($id)
     {
-        $cabinet = Cabinet::findOne($id);
+        $searchModel = new DocumentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
-        if (empty($cabinet)) {
-            throw new NotFoundHttpException();
-        }
-
-        $getDocumentsList = new DocumentListRequest();
-        $getDocumentsList->apiKey = $cabinet->api_key;
-        return $this->render('index', ['getDocumentsList' => $getDocumentsList, 'cabinet' => $cabinet]);
-    }
-
-    public function actionView()
-    {
-
-    }
-
-    public function actionCreate($id)
-    {
-        $cabinet = Cabinet::findOne($id);
-
-        if (empty($cabinet)) {
-            throw new NotFoundHttpException();
-        }
-
-        $createDocument = new DocumentCreateRequest([
-            'dateTime' => date('d.m.Y'),
-            'apiKey' => $cabinet->api_key,
-            'citySender' => townRefToDescription($cabinet->town, $cabinet->api_key),
-            'senderAddress' => departmentRefToDescription($cabinet->dispatch_dep, $cabinet->api_key),
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
-
-        return $this->render('create', ['createDocument' => $createDocument, 'cabinet' => $cabinet]);
     }
 
-    public function actionUpdate()
+    /**
+     * Displays a single Document model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
     {
-
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
-    public function actionDelete($apiKey, $ref)
+    /**
+     * Creates a new Document model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
     {
-        $client = new Client();
+        $model = new Document();
 
-        $delete = $client->createRequest()
-            ->setFormat(\yii\httpclient\Client::FORMAT_JSON)
-            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-            ->setData([
-                'apiKey' => $apiKey,
-                'modelName' => 'InternetDocument',
-                'calledMethod' => 'delete',
-                'methodProperties' => [
-                    'DocumentRefs' => $ref
-                ]
-            ])->send();
-
-        return $this->redirect(['index', 'apiKey' => $apiKey]);
-    }
-
-    public function actionGetData()
-    {
-        $model = new DocumentListRequest();
-
-        if ($model->load(\Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-
-                $items = $model->getDocuments();
-
-                $dataProvider = new ArrayDataProvider([
-                    'allModels' => $items,
-                    'pagination' => false,
-                ]);
-
-                return $this->renderAjax('grid', [
-                    'dataProvider' => $dataProvider,
-                    'api' => $model->apiKey,
-                ]);
-
-            } else {
-                return $this->asJson([
-                    'success' => false,
-                    'errors' => $model->getErrors()
-                ]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
-    public function actionSendData()
+    /**
+     * Updates an existing Document model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
     {
-        $model = new DocumentCreateRequest();
+        $model = $this->findModel($id);
 
-        if ($model->load(\Yii::$app->request->post())) {
-            if ($model->validate()) {
-                $model->sendData();
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing Document model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Document model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Document the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Document::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

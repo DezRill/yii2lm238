@@ -3,20 +3,18 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $createDocument app\models\document\request\DocumentCreateRequest */
+/* @var $model app\models\Document */
 
-$this->title = 'Создать накладную';
-$this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['document/index', 'id' => $cabinet->id]];
+$this->title = 'Create Document';
+$this->params['breadcrumbs'][] = ['label' => 'Documents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cabinet-create">
+<div class="document-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'createDocument' => $createDocument,
-        'cabinet' => $cabinet,
+        'model' => $model,
     ]) ?>
 
-    <div id="content" class="hidden"></div>
 </div>

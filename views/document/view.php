@@ -1,27 +1,41 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\DocumentBasic */
+/* @var $model app\models\Document */
 
-$this->title = 'Накладная №' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Службы доставки', 'url' => ['delivery-service/']];
-$this->params['breadcrumbs'][] = ['label' => "Кабинеты", 'url' => ['delivery-service/view', 'id' => 1]];
-$this->params['breadcrumbs'][] = 'Редактировать кабинет';
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Documents', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+\yii\web\YiiAsset::register($this);
 ?>
-<div class="cabinet-update">
+<div class="document-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Накладные', ['index', 'cabinet_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Удалить кабинет', ['delete', 'id' => $model->id], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => 'Вы уверены, что хотите удалить кабинет?',
-            'method' => 'post',
-        ],
-    ]) ?><br/><br/>
+    <p>
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
-    <?php echo $this->render('_form', ['model' => $model]) ?>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'cabinet_id',
+            'document_num',
+            'date',
+            'time',
+            'description:ntext',
+        ],
+    ]) ?>
+
 </div>
