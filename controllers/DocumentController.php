@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Cabinet;
+use app\models\DocumentStatusHistory;
 use Yii;
 use app\models\Document;
 use app\models\DocumentSearch;
+use yii\base\ErrorException;
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -29,31 +33,18 @@ class DocumentController extends Controller
         ];
     }
 
-    /**
-     * Lists all Document models.
-     * @return mixed
-     */
     public function actionIndex($id)
     {
+        $cabinet=Document::find()->one()->getCabinet()->one();
+
+        if(empty($cabinet)) throw new NotFoundHttpException('Ошибка загрузки данных');
         $searchModel = new DocumentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Document model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+            'cabinet' => $cabinet,
         ]);
     }
 
@@ -64,6 +55,8 @@ class DocumentController extends Controller
      */
     public function actionCreate()
     {
+
+        $cabinet = Document::find()->one()->getCabinet()->one();
         $model = new Document();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -72,6 +65,7 @@ class DocumentController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'cabinet' => $cabinet,
         ]);
     }
 
@@ -86,12 +80,22 @@ class DocumentController extends Controller
     {
         $model = $this->findModel($id);
 
+        $cabinet=Document::find()->one()->getCabinet()->one();
+
+        $messages=DocumentStatusHistory::find()->where(['document_id' => $model->id])->all();
+        $messagesProvider=new ArrayDataProvider([
+            'allModels' => $messages,
+            'pagination' => false
+        ]);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $cabinet->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'cabinet' => $cabinet,
+            'messages' => $messagesProvider,
         ]);
     }
 
@@ -104,9 +108,27 @@ class DocumentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model=$this->findModel($id);
+        $c_id=$model->cabinet_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'id' => $c_id]);
+    }
+
+    public function actionUpdateStatus($id)
+    {
+        $model=$this->findModel($id);
+        if (!empty($cabinet=Cabinet::findOne($model->cabinet_id)))
+        {
+            try{
+                $model->current_status=$model->updateStatus($cabinet->api_key);
+                $model->save();
+                return $this->asJson(['state'=>$model->current_status]);
+            }
+            catch (ErrorException $e) {
+                throw new NotFoundHttpException('Ошибка загрузки данных');
+            }
+        }
     }
 
     /**
@@ -122,6 +144,6 @@ class DocumentController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Страница не существует.');
     }
 }

@@ -1,6 +1,6 @@
 .post-container {
     margin: 20px 20px 20px 20px;
-    overflow: auto
+    overflow: auto;
 }
 .post-thumb {
     float: left;
@@ -15,7 +15,9 @@
 .post-content {
     margin-left: 120px
 }
+
 .post-title {
     font-weight: bold;
-    font-size: 200%
+    font-size: 200%;
+    margin-bottom: 10px;
 }

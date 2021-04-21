@@ -17,7 +17,7 @@ class DocumentSearch extends Document
     public function rules()
     {
         return [
-            [['id', 'cabinet_id'], 'integer'],
+            [['id', 'cabinet_id', 'current_status'], 'integer'],
             [['document_num', 'date', 'time', 'description'], 'safe'],
         ];
     }
@@ -46,6 +46,7 @@ class DocumentSearch extends Document
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);

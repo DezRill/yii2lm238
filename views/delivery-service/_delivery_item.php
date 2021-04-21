@@ -13,6 +13,7 @@ CSS;
 $this->registerCss($css);
 
 $this->registerJsFile('@web/js/jQueryCookies.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerCssFile('@web/css/item.css');
 
 $js = <<<JS
 $(document).on('click', '.image_icon', function() {

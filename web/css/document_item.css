@@ -1,0 +1,57 @@
+.btn-item {
+    width: 160px;
+}
+
+.document-menu {
+    float: right;
+}
+
+.document-content {
+    margin-left: 120px;
+    color: #737373;
+    font-size: 13px;
+}
+
+.document-thumb {
+    float: left;
+    text-align: center;
+    display: block;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    line-height: 72px;
+}
+
+.formalized {
+    background-color: #6A5ACD;
+    border: 3px solid #483D8B;
+    border-radius: 8px;
+}
+
+.sent {
+    background-color: yellow;
+    border: 3px solid #FFA500;
+    border-radius: 8px;
+}
+
+.delivered {
+    background-color: green;
+    border: 3px solid #006400;
+    border-radius: 8px;
+}
+
+.failure {
+    background-color: red;
+    border: 3px solid #8B0000;
+    border-radius: 8px;
+}
+
+.hr-line {
+    margin: 20px 0;
+    padding: 0;
+    height: 10px;
+    border: none;
+    border-top: 1px solid #333;
+    box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}

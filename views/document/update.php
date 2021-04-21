@@ -4,11 +4,14 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Document */
+/* @var $cabinet app\models\Cabinet */
 
-$this->title = 'Update Document: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Documents', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редактировать накладную: ' . $model->document_num;
+$this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['index', 'id' => $cabinet->id]];
+$this->params['breadcrumbs'][] = 'Редактировать';
+
+$this->registerCssFile("@web/css/status_item.css");
+
 ?>
 <div class="document-update">
 
@@ -16,6 +19,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'cabinet' => $cabinet,
+        'messages' => $messages,
     ]) ?>
 
 </div>

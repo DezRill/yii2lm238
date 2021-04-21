@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = 'Редактировать кабинет';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Накладные', ['document/index', 'apiKey' => $model->api_key], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Удалить кабинет', ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger',
         'data' => [
