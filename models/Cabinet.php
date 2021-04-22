@@ -36,7 +36,7 @@ class Cabinet extends \yii\db\ActiveRecord
         return [
             [['api_key', 'name', 'counterparty', 'contact_person', 'date_end'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['api_key'], 'string'],
-            [['date_end'], 'date', 'format' => 'yyyy-mm-dd'],
+            [['date_end'], 'safe'],
             [['name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town'], 'string', 'max' => 55],
             [['dispatch_dep'], 'string', 'max' => 255],
             [['counterparty', 'contact_person'], 'compare', 'compareValue' => '0', 'operator' => '!=', 'message' => 'Поле не должно быть пустым.']
@@ -60,5 +60,17 @@ class Cabinet extends \yii\db\ActiveRecord
             'town' => 'Город',
             'dispatch_dep' => 'Отделение отправки',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        //$this->date_end=Yii::$app->formatter->asDate(strtotime($this->date_end), 'php:Y-m-d');
+        $this->date_end=date('Ymd', strtotime($this->date_end));
+        return parent::beforeSave($insert);
+    }
+
+    public function afterFind()
+    {
+        $this->date_end=Yii::$app->formatter->asDate($this->date_end, 'php:d.m.Y');
     }
 }

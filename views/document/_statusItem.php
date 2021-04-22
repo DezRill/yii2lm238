@@ -4,16 +4,19 @@
 
 <div class="item">
     <div class="datetime">
-        <?= Yii::$app->formatter->asDate($model->date, 'php:d.m.Y') ?><br/>
-        <?= $model->time ?>
+        <b>
+            <?= Yii::$app->formatter->asDate($model->date, 'php:d.m.Y') ?><br/>
+            <?= $model->time ?>
+        </b>
     </div>
     <div class="status">
         <table>
             <tr>
                 <td>
-                    <?= $model->status ?>
+                    <b><?= $model->status ?></b>
                 </td>
             </tr>
         </table>
     </div>
 </div>
+<hr class="hr-line" />

@@ -59,21 +59,6 @@ echo $this->render('_cabinetChoose', ['model' => $model]);
         'items' => [
             ['label' => 'Службы доставки', 'url' => ['/delivery-service/index']],
             ['label' => 'Журнал деклараций доставки', 'options' => ['id' => 'showModal']],
-            //['label' => 'Yii главная', 'url' => ['/site/index']],
-            //['label' => 'Про нас', 'url' => ['/site/about']],
-            //['label' => 'Связаться с нами', 'url' => ['/site/contact']],
-            /*Yii::$app->user->isGuest ? (
-                ['label' => 'Войти', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )*/
         ],
     ]);
     NavBar::end();

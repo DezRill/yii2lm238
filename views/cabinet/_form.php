@@ -108,7 +108,7 @@ JS;
         'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
         'pluginOptions' => [
             'autoclose' => true,
-            'format' => 'yyyy-mm-dd',
+            'format' => 'dd.mm.yyyy',
         ]
     ])->label('Дата окончания действия ключа') ?>
 

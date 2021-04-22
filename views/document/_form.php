@@ -9,17 +9,14 @@ use yii\widgets\ActiveForm;
 /* @var $cabinet app\models\Cabinet */
 
 $css = <<<CSS
-.btn-save {
-text-align: center;
+.nav-pills {
+    text-align:center;
 }
+
 .nav-pills > li {
     float:none;
     display:inline-block;
     zoom:1;
-}
-
-.nav-pills {
-    text-align:center;
 }
 CSS;
 $this->registerCss($css);
@@ -36,7 +33,13 @@ $statuses = [
     '2' => 'Отправлено',
     '3' => 'Доставлен',
     '4' => 'Отказ',
-]
+];
+
+$services = [];
+foreach (\app\models\DeliveryService::find()->select(['id', 'name'])->all() as $item)
+{
+    $services+=[$item['id'] => $item['name']];
+}
 ?>
 
 <div class="document-form">
@@ -50,7 +53,7 @@ $statuses = [
 
     <div class="form-group">
         <?= Html::label('Служба доставки', 'delivery-service', ['class' => 'control-label']) ?>
-        <?= Html::input('text', 'delivery-service', 'Nova Poshta', ['class' => 'form-control']) ?>
+        <?= Html::dropDownList('services', 1, $services, ['class' => 'form-control']) ?>
     </div>
 
     <?= $form->field($model, 'cabinet_id')->dropDownList($cabinets)->label('Кабинет') ?>
@@ -62,21 +65,33 @@ $statuses = [
     <br/>
     <ul class="nav nav-pills">
         <li class="active">
-            <a data-toggle="tab" href="#statuses">Информация</a>
+            <a data-toggle="tab" href="#statuses"><span class="glyphicon glyphicon-file"></span> Информация</a>
         </li>
         <li>
-            <a data-toggle="tab" href="#description">Примечание</a>
+            <a data-toggle="tab" href="#description"> <span class="glyphicon glyphicon-comment"></span> Примечание</a>
         </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="statuses">
-            <?= \yii\widgets\ListView::widget([
-                'dataProvider' => $messages,
-                'itemView' => '_statusItem',
-            ]) ?>
-            </div >
-        <div class="tab-pane" id = "description" >
-            <?= $form->field($model, 'description')->textarea(['rows' => 6])->label('') ?>
+            <div class="statuses-header">
+                <div class="date-header">
+                    <b>Дата</b>
+                </div>
+                <div class="status-header">
+                    <b>Статус</b>
+                </div>
+            </div>
+            <hr class="hr-line" />
+            <div class="list-view">
+                <?= \yii\widgets\ListView::widget([
+                    'dataProvider' => $messages,
+                    'itemView' => '_statusItem',
+                    'summary' => ''
+                ]) ?>
+            </div>
+        </div>
+        <div class="tab-pane" id="description">
+            <?= $form->field($model, 'description')->textarea(['rows' => 8])->label('') ?>
         </div>
     </div>
 

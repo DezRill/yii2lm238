@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Cabinet;
+use app\models\DocumentCreateRequest;
 use app\models\DocumentStatusHistory;
 use Yii;
 use app\models\Document;
@@ -35,9 +36,9 @@ class DocumentController extends Controller
 
     public function actionIndex($id)
     {
-        $cabinet=Document::find()->one()->getCabinet()->one();
+        $cabinet = Cabinet::findOne($id);
 
-        if(empty($cabinet)) throw new NotFoundHttpException('Ошибка загрузки данных');
+        if (empty($cabinet)) throw new NotFoundHttpException('Ошибка загрузки данных');
         $searchModel = new DocumentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
@@ -53,15 +54,19 @@ class DocumentController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
+        $cabinet = Cabinet::findOne($id);
+        $model = new DocumentCreateRequest([
+            'date' => date('d.m.Y'),
+            'senderTown' => $cabinet->town,
+            'senderDepartment' => $cabinet->dispatch_dep,
+            'serviceType' => 'WarehouseDoors',
+        ]);
 
-        $cabinet = Document::find()->one()->getCabinet()->one();
-        $model = new Document();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        /*if ($document->load(Yii::$app->request->post()) && $document->save()) {
+            return $this->redirect(['index', 'id' => $cabinet->id]);
+        }*/
 
         return $this->render('create', [
             'model' => $model,
@@ -80,10 +85,10 @@ class DocumentController extends Controller
     {
         $model = $this->findModel($id);
 
-        $cabinet=Document::find()->one()->getCabinet()->one();
+        $cabinet = Cabinet::findOne($model->cabinet_id);
 
-        $messages=DocumentStatusHistory::find()->where(['document_id' => $model->id])->all();
-        $messagesProvider=new ArrayDataProvider([
+        $messages = DocumentStatusHistory::find()->where(['document_id' => $model->id])->all();
+        $messagesProvider = new ArrayDataProvider([
             'allModels' => $messages,
             'pagination' => false
         ]);
@@ -108,8 +113,8 @@ class DocumentController extends Controller
      */
     public function actionDelete($id)
     {
-        $model=$this->findModel($id);
-        $c_id=$model->cabinet_id;
+        $model = $this->findModel($id);
+        $c_id = $model->cabinet_id;
         $model->delete();
 
         return $this->redirect(['index', 'id' => $c_id]);
@@ -117,15 +122,13 @@ class DocumentController extends Controller
 
     public function actionUpdateStatus($id)
     {
-        $model=$this->findModel($id);
-        if (!empty($cabinet=Cabinet::findOne($model->cabinet_id)))
-        {
-            try{
-                $model->current_status=$model->updateStatus($cabinet->api_key);
+        $model = $this->findModel($id);
+        if (!empty($cabinet = Cabinet::findOne($model->cabinet_id))) {
+            try {
+                $model->current_status = $model->updateStatus($cabinet->api_key);
                 $model->save();
-                return $this->asJson(['state'=>$model->current_status]);
-            }
-            catch (ErrorException $e) {
+                return $this->asJson(['state' => $model->current_status]);
+            } catch (ErrorException $e) {
                 throw new NotFoundHttpException('Ошибка загрузки данных');
             }
         }

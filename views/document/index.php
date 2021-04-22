@@ -66,6 +66,7 @@ $this->registerJs($js, $this::POS_END);
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_documentItem',
+        'summary' => '',
     ])
     ?>
 

@@ -6,11 +6,11 @@ use yii\helpers\Html;
 /* @var $model app\models\Document */
 /* @var $cabinet app\models\Cabinet */
 
-$this->title = 'Редактировать накладную: ' . $model->document_num;
+$this->title = 'Накладная: ' . $model->document_num;
 $this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['index', 'id' => $cabinet->id]];
 $this->params['breadcrumbs'][] = 'Редактировать';
 
-$this->registerCssFile("@web/css/status_item.css");
+$this->registerCssFile("@web/css/update_style.css");
 
 ?>
 <div class="document-update">
