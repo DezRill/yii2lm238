@@ -57,6 +57,7 @@ class DocumentController extends Controller
     public function actionCreate($id)
     {
         $cabinet = Cabinet::findOne($id);
+
         $model = new DocumentCreateRequest([
             'date' => date('d.m.Y'),
             'senderTown' => $cabinet->town,
@@ -64,9 +65,13 @@ class DocumentController extends Controller
             'serviceType' => 'WarehouseDoors',
         ]);
 
-        /*if ($document->load(Yii::$app->request->post()) && $document->save()) {
-            return $this->redirect(['index', 'id' => $cabinet->id]);
-        }*/
+        if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
+
+//            $model->sendData();
+            echo '<pre>'.print_r($model).'</pre>';
+            exit();
+//            return $this->redirect(['index', 'id' => $cabinet->id]);
+        }
 
         return $this->render('create', [
             'model' => $model,

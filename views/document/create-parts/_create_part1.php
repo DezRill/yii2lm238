@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\web\JsExpression;
-use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
@@ -155,7 +154,7 @@ $(document).find('#parcel_tab').on('click', function(e) {
   }
 })
 JS;
-$this->registerJs($checkFields);
+//$this->registerJs($checkFields);
 
 $openModal = <<<JS
 $(document).on('click', '#recipient', function() {
@@ -180,8 +179,6 @@ $serviceTypeArray = [
 <div class="part1-form">
 
     <?= Html::input('text', 'api_key', $cabinet->api_key, ['class' => 'hidden', 'id' => 'api_key']) ?>
-
-    <?php $form = ActiveForm::begin() ?>
 
     <?= $form->field($model, 'date')->widget(DatePicker::class, [
         'model' => $model,
@@ -295,7 +292,5 @@ $serviceTypeArray = [
     echo $this->render('_part1_addressModal', ['model' => $model, 'form' => $form]);
     \yii\bootstrap\Modal::end()
     ?>
-
-    <?php ActiveForm::end() ?>
 
 </div>

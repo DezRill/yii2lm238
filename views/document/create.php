@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DocumentCreateRequest */
@@ -27,24 +28,38 @@ $this->registerCss($css);
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <ul class="nav nav-pills">
+    <?php $form = ActiveForm::begin() ?>
+    <ul class="nav nav-pills nav-fill">
         <li class="nav-item active">
-            <a data-toggle="tab" href="#information"><span class="glyphicon glyphicon-file"></span> Информация</a>
+            <a class="nav-link" data-toggle="tab" href="#information"><span class="glyphicon glyphicon-file"></span> Информация</a>
         </li>
         <li id="parcel_tab" class="nav-item">
-            <a data-toggle="tab" href="#parcel"> <span class="glyphicon glyphicon-envelope"></span> Посылка</a>
+            <a class="nav-link" data-toggle="tab" href="#parcel"> <span class="glyphicon glyphicon-envelope"></span> Посылка</a>
         </li>
         <li class="nav-item">
-            <a data-toggle="tab" href="#payment"> <span class="glyphicon glyphicon-usd"></span> Оплата</a>
+            <a class="nav-link" data-toggle="tab" href="#payment"> <span class="glyphicon glyphicon-usd"></span> Оплата</a>
         </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="information">
-            <?= $this->render('create-parts/_create_part1', ['model' => $model, 'cabinet' => $cabinet]) ?>
+            <?= $this->render('create-parts/_create_part1', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
         <div class="tab-pane" id="parcel">
+            <?= $this->render('create-parts/_create_part2', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
         <div class="tab-pane" id="payment">
         </div>
     </div>
+    <?=Html::submitButton('Send')?>
+    <?php ActiveForm::end() ?>
 </div>
+
+
+<?php
+\yii\bootstrap\Modal::begin([
+    'id' => 'sizesDataModal',
+    'header' => '<h2>Габариты</h2>'
+]);
+echo $this->render('create-parts/_part2_sizesModal', ['model' => $model, 'form' => $form]);
+\yii\bootstrap\Modal::end()
+?>
