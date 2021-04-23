@@ -52,13 +52,17 @@ $('#addressDataModal').on('click', '#save-address-data', function() {
     $('#'+recipientData[0].id).find('option').last().text(),
     $('#'+recipientData[1].id).val(),
     $('#'+recipientData[2].id).val(),
+    $('#'+recipientData[3].id).val(),
   ];
   
-  console.log(data);
+  if (data[0]!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
+  {
+      $(document).find('#address').val(data[0]+', '+data[1]+' '+data[2]);
+
+      $(document).find('#addressDataModal').modal('hide');
+  }
+  else alert ('Заполните все необходимые поля');
   
-  $(document).find('#address').val(data[0]+', '+data[1]+' '+data[2]);
-  
-  $(document).find('#addressDataModal').modal('hide');
 });
 JS;
 $this->registerJs($acceptAddress);
@@ -112,4 +116,4 @@ $this->registerCss($acceptBtnStyle);
 
 <?= $form->field($model, 'flat')->textInput()->label('Квартира') ?>
 
-<?= \yii\helpers\Html::button('Зберегти', ['id' => 'save-address-data', 'class' => 'btn btn-success btn-save']); ?>
+<?= \yii\helpers\Html::button('Сохранить', ['id' => 'save-address-data', 'class' => 'btn btn-success btn-save']); ?>

@@ -144,7 +144,7 @@ $(document).find('#parcel_tab').on('click', function(e) {
           
       case 'WarehouseWarehouse':
           {
-              if ($('#recipient').val()==='' || $('#townToDepartment').val()==='' || $('#recipientDepartment').val()==='')
+              if ($('#recipient').val()==='' || $('#townToDepartment').val()===null || $('#recipientDepartment').val()===null)
               {
                   e.preventDefault();
                   alert('Заполните все необходимые поля');
@@ -233,11 +233,11 @@ $serviceTypeArray = [
 
     <div class="form-group" id="address-group">
         <?= Html::label('Адрес', '', ['control-label']) ?>
-        <?= Html::textInput('address', '', ['class' => 'form-control', 'id' => 'address']) ?>
+        <?= Html::textInput('address', '', ['class' => 'form-control', 'id' => 'address', 'readonly' => true]) ?>
     </div>
     <div class="form-group">
         <?= Html::label('Получатель', '', ['control-label']) ?>
-        <?= Html::textInput('recipient', '', ['class' => 'form-control', 'id' => 'recipient']) ?>
+        <?= Html::textInput('recipient', '', ['class' => 'form-control', 'id' => 'recipient', 'readonly' => true]) ?>
     </div>
 
     <div class="hidden" id="department-group">

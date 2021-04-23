@@ -15,9 +15,17 @@ $('#recipientDataModal').on('click', '#save-user-data', function() {
     $('#'+recipientData[3].id).val(),
   ];
   
-  $(document).find('#recipient').val(data[2]+' '+data[1]+' '+data[3]+', '+data[0]);
-  
-  $(document).find('#recipientDataModal').modal('hide');
+  if (data[0]!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
+  {
+    if (data[0].match(/\d/g).length===13)
+        {
+            $(document).find('#recipient').val(data[2]+' '+data[1]+' '+data[3]+', '+data[0]);
+    
+            $(document).find('#recipientDataModal').modal('hide');
+        }
+    else alert ('Заполните номер телефона получателя');
+  }
+  else alert ('Заполните все необходимые поля');
 })
 JS;
 $this->registerJs($acceptRecipient);
@@ -40,4 +48,4 @@ $this->registerCss($acceptBtnStyle);
 
 <?= $form->field($model, 'lastName')->textInput()->label('Отчество') ?>
 
-<?= \yii\helpers\Html::button('Зберегти', ['id' => 'save-user-data', 'class' => 'btn btn-success btn-save']); ?>
+<?= \yii\helpers\Html::button('Сохранить', ['id' => 'save-user-data', 'class' => 'btn btn-success btn-save']); ?>
