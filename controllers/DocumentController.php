@@ -74,7 +74,7 @@ class DocumentController extends Controller
         if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
 
 //            $model->sendData();
-            echo '<pre>' . print_r($model) . '</pre>';
+            debug($model);
             exit();
 //            return $this->redirect(['index', 'id' => $cabinet->id]);
         }

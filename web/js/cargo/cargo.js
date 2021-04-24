@@ -22,8 +22,8 @@ $(document).ready(function () {
      *  При наведении курсора на слайдер изменения будут применяться только к полям в родительском блоке
      */
 
-    $(document).on('mouseenter', '#sliderSlider', function () {
-        var element=$(this).closest('#cargoElement');
+    $(document).on('mouseenter', '#cargoElement', function () {
+        var element=$(this);
         sendWeight=element.find('#sendWeight');
         sizes=element.find('.sizes');
         weight_input=element.find('.cargo-element-weight');
@@ -31,13 +31,6 @@ $(document).ready(function () {
         width_input=element.find('.cargo-element-width');
         height_input=element.find('.cargo-element-height');
         overweight=element.find('.overweight');
-        console.log(sendWeight);
-        console.log(sizes);
-        console.log(weight_input);
-        console.log(length_input);
-        console.log(width_input);
-        console.log(height_input);
-        console.log(overweight);
     });
 
     var slider_settings = {
@@ -55,11 +48,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 0.5 кг');
                     sizes.text('15x12x11');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('0.5');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('15');
+                    width_input.val('12');
+                    height_input.val('11');
                     overweight.addClass('hidden');
                     return '0.5';
                 }
@@ -68,11 +60,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 1 кг');
                     sizes.text('26x14x11');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('1');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('26');
+                    width_input.val('14');
+                    height_input.val('11');
                     overweight.addClass('hidden');
                     return '1';
                 }
@@ -81,11 +72,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 2 кг');
                     sizes.text('33x22x11');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('2');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('33');
+                    width_input.val('22');
+                    height_input.val('11');
                     overweight.addClass('hidden');
                     return '2';
                 }
@@ -94,11 +84,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 5 кг');
                     sizes.text('40x25x20');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('5');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('40');
+                    width_input.val('25');
+                    height_input.val('20');
                     overweight.addClass('hidden');
                     return '5';
                 }
@@ -107,11 +96,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 10 кг');
                     sizes.text('42x34x28');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('10');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('42');
+                    width_input.val('34');
+                    height_input.val('28');
                     overweight.addClass('hidden');
                     return '10';
                 }
@@ -120,11 +108,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 20 кг');
                     sizes.text('50x40x40');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('20');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('50');
+                    width_input.val('40');
+                    height_input.val('40');
                     overweight.addClass('hidden');
                     return '20'
                 }
@@ -133,11 +120,10 @@ $(document).ready(function () {
                 {
                     sendWeight.text('до 30 кг');
                     sizes.text('68x43x41');
-                    var items=$('.sizes').text().split('x');
                     weight_input.val('30');
-                    length_input.val(items[0]);
-                    width_input.val(items[1]);
-                    height_input.val(items[2]);
+                    length_input.val('68');
+                    width_input.val('43');
+                    height_input.val('41');
                     overweight.addClass('hidden');
                     return '30'
                 }
@@ -271,7 +257,11 @@ $(document).ready(function () {
             ];
 
             if (data[0] !== '' && data[1] !== '' && data[2] !== '') {
-                $(document).find(clicked).text(data[0] + 'x' + data[1] + 'x' + data[2]);
+                sizes.text(data[0] + 'x' + data[1] + 'x' + data[2]);
+
+                length_input.val(data[0]);
+                width_input.val(data[1]);
+                height_input.val(data[2]);
 
                 $(document).find('#sizesDataModal').modal('hide');
             }
