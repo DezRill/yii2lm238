@@ -154,7 +154,7 @@ $(document).find('#parcel_tab').on('click', function(e) {
   }
 })
 JS;
-//$this->registerJs($checkFields);
+$this->registerJs($checkFields);
 
 $openModal = <<<JS
 $(document).on('click', '#recipient', function() {
