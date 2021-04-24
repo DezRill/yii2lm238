@@ -49,15 +49,17 @@ $('#addressDataModal').on('click', '#save-address-data', function() {
   var recipientData = $('#addressDataModal').find('.form-control');
    
   var data = [
-    $('#'+recipientData[0].id).find('option').last().text(),
+    $('#'+recipientData[0].id).find('option').last(),
     $('#'+recipientData[1].id).val(),
     $('#'+recipientData[2].id).val(),
     $('#'+recipientData[3].id).val(),
   ];
   
-  if (data[0]!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
+  if (data[0].text()!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
   {
-      $(document).find('#address').val(data[0]+', '+data[1]+' '+data[2]);
+      $(document).find('#address').val(data[0].text()+', '+data[1]+' '+data[2]);
+      
+      $(document).find('#recipientTown').append(data[0]);
 
       $(document).find('#addressDataModal').modal('hide');
   }
@@ -92,7 +94,7 @@ CSS;
 $this->registerCss($acceptBtnStyle);
 ?>
 
-<?= $form->field($model, 'recipientTown')->widget(\kartik\select2\Select2::class, [
+<? /*= $form->field($model, 'recipientTown')->widget(\kartik\select2\Select2::class, [
     'initValueText' => null,
     'options' => ['id' => 'townToAddress'],
     'pluginOptions' => [
@@ -108,7 +110,29 @@ $this->registerCss($acceptBtnStyle);
             'cache' => true
         ]
     ]
-])->label('Город')?>
+])->label('Город')*/ ?>
+
+<div class="form-group">
+    <?= \yii\helpers\Html::label('Город', null, ['class' => 'control-label']) ?>
+    <?= \kartik\select2\Select2::widget(['initValueText' => null,
+        'model' => $model,
+        'attribute' => 'recipientTown',
+        'options' => ['class' => 'form-control'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 0,
+            'ajax' => [
+                'url' => "https://api.novaposhta.ua/v2.0/json/",
+                'type' => 'POST',
+                'dataType' => 'json',
+                'delay' => 250,
+                'data' => new JsExpression($requestJsTowns),
+                'processResults' => new JsExpression($resultsJsTowns),
+                'cache' => true
+            ]
+        ]]) ?>
+    <div class="help-block"></div>
+</div>
 
 <?= $form->field($model, 'street')->textInput()->label('Улица') ?>
 

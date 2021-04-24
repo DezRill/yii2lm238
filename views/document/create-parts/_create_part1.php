@@ -76,7 +76,7 @@ function(params) {
         apiKey: apiKey,
         methodProperties: {
             Limit:30,
-            CityRef: $('#townToDepartment').val(),
+            CityRef: $('#recipientTown').val(),
             Page: params.page
         },
     });
@@ -240,7 +240,7 @@ $serviceTypeArray = [
     <div class="hidden" id="department-group">
         <?= $form->field($model, 'recipientTown')->widget(\kartik\select2\Select2::class, [
             'initValueText' => null,
-            'options' => ['id' => 'townToDepartment'],
+            'options' => ['id' => 'recipientTown'],
             'pluginOptions' => [
                 'allowClear' => true,
                 'minimumInputLength' => 0,

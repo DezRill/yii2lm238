@@ -61,14 +61,17 @@ class DocumentController extends Controller
 
         $model = new DocumentCreateRequest([
             'date' => date('d.m.Y'),
+            'sender' => $cabinet->counterparty,
             'senderTown' => $cabinet->town,
             'senderDepartment' => $cabinet->dispatch_dep,
+            'contactSender' => $cabinet->contact_person,
+            'sendersPhone' => getPhone($cabinet->api_key, $cabinet->counterparty),
             'serviceType' => 'WarehouseDoors',
             'cargoType' => 'Cargo',
             'redelivery' => 0,
         ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
 
 //            $model->sendData();
             echo '<pre>' . print_r($model) . '</pre>';
@@ -142,11 +145,6 @@ class DocumentController extends Controller
         }
     }
 
-    public function actionSetSlider()
-    {
-        return $this->renderAjax('create-parts/_slider');
-    }
-
     /**
      * Finds the Document model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -161,5 +159,12 @@ class DocumentController extends Controller
         }
 
         throw new NotFoundHttpException('Страница не существует.');
+    }
+
+    public function actionAddCargo()
+    {
+        $key = Yii::$app->request->post('key');
+
+        return $this->renderPartial('create-parts/_cargo', ['key' => $key]);
     }
 }

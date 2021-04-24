@@ -109,6 +109,24 @@ function getTestDocuments($apiKey)
     return ArrayHelper::getValue($documents->data, 'data.0.StatusCode');
 }
 
+function getPhone($apiKey, $ref)
+{
+    $client = new Client();
+    $counterpartyContactPerson = $client->createRequest()
+        ->setFormat(Client::FORMAT_JSON)
+        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
+        ->setData([
+            'apiKey' => $apiKey,
+            'modelName' => 'Counterparty',
+            'calledMethod' => 'getCounterpartyContactPersons',
+            'methodProperties' => ['Ref' => $ref]
+        ])->send();
+
+    $phone=ArrayHelper::getValue($counterpartyContactPerson->data, 'data.0.Phones');
+
+    return $phone;
+}
+
 /*function getCity($key, $ref)
 {
     $client = new Client();

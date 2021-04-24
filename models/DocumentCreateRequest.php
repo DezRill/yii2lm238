@@ -10,14 +10,19 @@ namespace app\models;
 
 
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
+use yii\httpclient\Client;
 
 class DocumentCreateRequest extends Model
 {
     public $date;
+    public $sender;
     public $senderTown;
+    public $contactSender;
     public $senderDepartment;
+    public $sendersPhone;
     public $serviceType;
-    public $phone;
+    public $recipientsPhone;
     public $firstName;
     public $secondName;
     public $lastName;
@@ -43,26 +48,32 @@ class DocumentCreateRequest extends Model
             [
                 [
                     'date',
+                    'sender',
                     'senderTown',
                     'senderDepartment',
+                    'sendersPhone',
                     'serviceType',
-                    'phone',
+                    'recipientsPhone',
                     'firstName',
                     'secondName',
                     'recipientTown',
                     'description',
                     'cargoType',
-                    'cost'
+                    'cost',
+                    'payerType',
+                    'seatsAmount'
                 ],
                 'required', 'message' => 'Поля должны быть заполнены'
             ],
             [
                 [
                     'date',
+                    'sender',
                     'senderTown',
                     'senderDepartment',
+                    'sendersPhone',
                     'serviceType',
-                    'phone',
+                    'recipientsPhone',
                     'firstName',
                     'secondName',
                     'lastName',
@@ -83,6 +94,7 @@ class DocumentCreateRequest extends Model
                     'flat',
                     'cost',
                     'redeliveryValue',
+                    'seatsAmount',
                 ],
                 'integer', 'message' => 'Только целые числа'
             ],
@@ -102,8 +114,190 @@ class DocumentCreateRequest extends Model
     }
 
 
-    public function sendData()
+    public function sendData($apiKey)
     {
+        $client = new Client();
+        $request=$client->createRequest()
+            ->setFormat(Client::FORMAT_JSON)
+            ->setUrl('https://api.novaposhta.ua/v2.0/json/');
 
+        if ($this->serviceType==='WarehouseWarehouse')
+        {
+            if($this->cargoType==='Cargo')
+            {
+                if ($this->redelivery===0)
+                {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'OptionsSeat' => $this->seatParams,
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => '1',
+                            'RecipientHouse' => '',
+                            'RecipientFlat' => '',
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date
+
+                        ]
+                    ])->send();
+                }
+                else if ($this->redelivery===1)
+                {
+
+                }
+            }
+            else if ($this->cargoType==='Documents')
+            {
+                if ($this->redelivery===0)
+                {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'VolumeGeneral' => '0.005',
+                            'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => '1',
+                            'RecipientHouse' => '',
+                            'RecipientFlat' => '',
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date
+
+                        ]
+                    ])->send();
+                }
+                else if ($this->redelivery===1)
+                {
+
+                }
+            }
+        }
+        else if ($this->serviceType==='WarehouseDoors')
+        {
+            if($this->cargoType==='Cargo')
+            {
+                if ($this->redelivery===0)
+                {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'OptionsSeat' => $this->seatParams,
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => $this->street,
+                            'RecipientHouse' => $this->house,
+                            'RecipientFlat' => $this->flat,
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date
+
+                        ]
+                    ])->send();
+                }
+                else if ($this->redelivery===1)
+                {
+
+                }
+            }
+            else if ($this->cargoType==='Documents')
+            {
+                if ($this->redelivery===0)
+                {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'VolumeGeneral' => '0.005',
+                            'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => $this->street,
+                            'RecipientHouse' => $this->house,
+                            'RecipientFlat' => $this->flat,
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date
+
+                        ]
+                    ])->send();
+                }
+                else if ($this->redelivery===1)
+                {
+
+                }
+            }
+        }
+
+        return $request->data;
     }
 }

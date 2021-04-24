@@ -10,26 +10,7 @@ $this->title = 'Создание накладной';
 $this->params['breadcrumbs'][] = ['label' => 'Накладные', 'url' => ['index', 'id' => $cabinet->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
-$css = <<< CSS
-.nav-pills {
-    text-align:center;
-}
-
-.nav-pills > li {
-    float:none;
-    display:inline-block;
-    zoom:1;
-}
-
-.acceptBtn {
-margin-left: 40%;
-margin-right: 40%;
-margin-top: 30px;
-width: 180px;
-}
-CSS;
-$this->registerCss($css);
-
+\app\assets\CargoAsset::register($this);
 ?>
 <div class="document-create">
 
@@ -38,10 +19,12 @@ $this->registerCss($css);
     <?php $form = ActiveForm::begin() ?>
     <ul class="nav nav-pills nav-fill">
         <li class="nav-item active">
-            <a class="nav-link" data-toggle="tab" href="#information"><span class="glyphicon glyphicon-file"></span> Информация</a>
+            <a class="nav-link" data-toggle="tab" href="#information"><span class="glyphicon glyphicon-file"></span>
+                Информация</a>
         </li>
         <li id="parcel_tab" class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#parcel"> <span class="glyphicon glyphicon-envelope"></span> Посылка</a>
+            <a class="nav-link" data-toggle="tab" href="#parcel"> <span class="glyphicon glyphicon-envelope"></span>
+                Посылка</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#payment"> <span class="glyphicon glyphicon-usd"></span> Оплата</a>
@@ -58,7 +41,7 @@ $this->registerCss($css);
             <?= $this->render('create-parts/_create_part3', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
     </div>
-    <?=Html::submitButton('Создать', ['class' => 'btn btn-primary acceptBtn'])?>
+    <?= Html::submitButton('Создать', ['class' => 'btn btn-primary acceptBtn']) ?>
     <?php ActiveForm::end() ?>
 </div>
 
