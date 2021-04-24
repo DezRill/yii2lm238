@@ -19,9 +19,9 @@ use yii\helpers\Html;
         <div class="slider-div">
             <input type="text" class="form-control" name="sliderOptionsSend" data-value="1" value="1" style="display: none;">
         </div>
-        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key+1) . '][volumetricLength]', '', ['class' => 'cargo-element-length hidden']) ?>
-        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key+1) . '][volumetricWidth]', '', ['class' => 'cargo-element-width hidden']) ?>
-        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key+1) . '][volumetricHeight]', '', ['class' => 'cargo-element-height hidden']) ?>
+        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key) . '][volumetricLength]', '', ['class' => 'cargo-element-length hidden']) ?>
+        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key) . '][volumetricWidth]', '', ['class' => 'cargo-element-width hidden']) ?>
+        <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . ($key) . '][volumetricHeight]', '', ['class' => 'cargo-element-height hidden']) ?>
 
     </div>
     <div class="element-footer">

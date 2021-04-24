@@ -200,6 +200,19 @@ $(document).ready(function () {
             url: '/document/add-cargo',
         }).done(function (element) {
             var new_cargo_element = $(element);
+
+            /**
+             *  Ставлю фокус полей на новый элемент, чтобы данные предыдущего не сбрасывались
+             */
+
+            sendWeight=new_cargo_element.find('#sendWeight');
+            sizes=new_cargo_element.find('.sizes');
+            weight_input=new_cargo_element.find('.cargo-element-weight');
+            length_input=new_cargo_element.find('.cargo-element-length');
+            width_input=new_cargo_element.find('.cargo-element-width');
+            height_input=new_cargo_element.find('.cargo-element-height');
+            overweight=new_cargo_element.find('.overweight');
+
             new_cargo_element.find('.removeElement').removeClass('hidden');
 
             var slider = new_cargo_element.find('input[name="sliderOptionsSend"]');
