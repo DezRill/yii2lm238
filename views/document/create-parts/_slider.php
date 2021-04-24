@@ -11,7 +11,7 @@ function (val) {
           {
               $('#sendWeight').text('до 0.5 кг');
               $('.sizes').text('15x12x11');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('0.5');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -24,7 +24,7 @@ function (val) {
           {
               $('#sendWeight').text('до 1 кг');
               $('.sizes').text('26x14x11');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('1');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -37,7 +37,7 @@ function (val) {
           {
               $('#sendWeight').text('до 2 кг');
               $('.sizes').text('33x22x11');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('2');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -50,7 +50,7 @@ function (val) {
           {
               $('#sendWeight').text('до 5 кг');
               $('.sizes').text('40x25x20');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('5');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -63,7 +63,7 @@ function (val) {
           {
               $('#sendWeight').text('до 10 кг');
               $('.sizes').text('42x34x28');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('10');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -76,7 +76,7 @@ function (val) {
           {
               $('#sendWeight').text('до 20 кг');
               $('.sizes').text('50x40x40');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('20');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);
@@ -89,7 +89,7 @@ function (val) {
           {
               $('#sendWeight').text('до 30 кг');
               $('.sizes').text('68x43x41');
-              var items=$('#sizes').text().split('x');
+              var items=$('.sizes').text().split('x');
               $('.cargo-element-weight').val('30');
               $('.cargo-element-length').val(items[0]);
               $('.cargo-element-width').val(items[1]);

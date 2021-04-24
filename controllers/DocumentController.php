@@ -65,9 +65,10 @@ class DocumentController extends Controller
             'senderDepartment' => $cabinet->dispatch_dep,
             'serviceType' => 'WarehouseDoors',
             'cargoType' => 'Cargo',
+            'redelivery' => 0,
         ]);
 
-        if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
 //            $model->sendData();
             echo '<pre>' . print_r($model) . '</pre>';

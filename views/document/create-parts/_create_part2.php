@@ -252,15 +252,6 @@ $this->registerJs($mainJs);
                             <?= Html::label('15x12x11', null, ['class' => 'sizes']) ?> <span class="glyphicon glyphicon-resize-full"></span>
                         </div>
                     </div>
-
-                    <?php
-                    /*\yii\bootstrap\Modal::begin([
-                        'id' => 'sizesDataModal',
-                        'header' => '<h2>Габариты</h2>'
-                    ]);
-                    echo $this->render('_part2_sizesModal', ['model' => $model, 'form' => $form]);
-                    \yii\bootstrap\Modal::end()
-                    */ ?>
                 </div>
             </div>
             <b><?= Html::button('<span class="glyphicon glyphicon-plus-sign"> ДОБАВИТЬ МЕСТО</span>', ['id' => 'addPlace']) ?></b>

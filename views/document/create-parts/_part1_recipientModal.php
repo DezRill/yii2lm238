@@ -46,6 +46,6 @@ $this->registerCss($acceptBtnStyle);
 
 <?= $form->field($model, 'secondName')->textInput()->label('Фамилия') ?>
 
-<?= $form->field($model, 'lastName')->textInput()->label('Отчество') ?>
+<?= $form->field($model, 'lastName')->textInput()->hint('Необязательно')->label('Отчество') ?>
 
 <?= \yii\helpers\Html::button('Сохранить', ['id' => 'save-user-data', 'class' => 'btn btn-success btn-save']); ?>

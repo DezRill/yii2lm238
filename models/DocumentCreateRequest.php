@@ -27,23 +27,14 @@ class DocumentCreateRequest extends Model
     public $house;
     public $flat;
     public $cargoType;
-    public $seatParams = [
-        0 => [
-            'weight' => 'value',
-            'length' => 'value1',
-            'width' => 'value2',
-            'height' => 'value3',
-        ],
-    ];
-//    public $weight;
-//    public $length;
-//    public $width;
-//    public $height;
+    public $seatParams;
     public $seatsAmount;
     public $cost;
     public $description;
-    public $backwardRedeliveryMoney;
     public $payerType;
+    public $redelivery;
+    public $redeliveryValue;
+    public $redeliveryPayer;
 
 
     public function rules()
@@ -58,15 +49,42 @@ class DocumentCreateRequest extends Model
                     'phone',
                     'firstName',
                     'secondName',
+                    'recipientTown',
+                    'description',
+                    'cargoType',
+                    'cost'
+                ],
+                'required', 'message' => 'Поля должны быть заполнены'
+            ],
+            [
+                [
+                    'date',
+                    'senderTown',
+                    'senderDepartment',
+                    'serviceType',
+                    'phone',
+                    'firstName',
+                    'secondName',
                     'lastName',
                     'recipientTown',
                     'recipientDepartment',
                     'street',
-                    'house',
-                    'flat',
+                    'description',
                     'cargoType',
+                    'payerType',
+                    'redelivery',
+                    'redeliveryPayer',
                 ],
                 'string'
+            ],
+            [
+                [
+                    'house',
+                    'flat',
+                    'cost',
+                    'redeliveryValue',
+                ],
+                'integer', 'message' => 'Только целые числа'
             ],
             [['seatParams'], 'safe'],
             [['seatParams'], 'seatValidation'],
@@ -76,15 +94,16 @@ class DocumentCreateRequest extends Model
 
     public function seatValidation($attr)
     {
-        foreach ($this->$attr as $item){
-            if(empty($item['weight']) || empty($item['length']) || empty($item['width']) || empty($item['height'])){
-                $this->addError($attr,'asasasasdsdasdas');
+        foreach ($this->$attr as $item) {
+            if (empty($item['weight']) || empty($item['length']) || empty($item['width']) || empty($item['height'])) {
+                $this->addError($attr, 'Поля должны быть заполнены');
             }
         }
     }
 
 
-    public function sendData(){
+    public function sendData()
+    {
 
     }
 }
