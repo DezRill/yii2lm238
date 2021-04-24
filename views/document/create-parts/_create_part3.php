@@ -1,7 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 22.04.2021
- * Time: 10:44
- */
+
+/* @var $this yii\web\View */
+/* @var $model app\models\DocumentCreateRequest */
+/* @var $form yii\widgets\ActiveForm */
+/* @var $cabinet app\models\Cabinet */
+
+?>
+
+

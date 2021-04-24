@@ -17,7 +17,7 @@ $('#recipientDataModal').on('click', '#save-user-data', function() {
   
   if (data[0]!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
   {
-    if (data[0].match(/\d/g).length===13)
+    if (data[0].match(/\d/g).length===12)
         {
             $(document).find('#recipient').val(data[2]+' '+data[1]+' '+data[3]+', '+data[0]);
     
@@ -39,7 +39,7 @@ $this->registerCss($acceptBtnStyle);
 ?>
 
 <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::class, [
-    'mask' => '+3809999999999'
+    'mask' => '+380999999999'
 ])->label('Телефон') ?>
 
 <?= $form->field($model, 'firstName')->textInput()->label('Имя') ?>

@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Cabinet;
 use app\models\DocumentCreateRequest;
 use app\models\DocumentStatusHistory;
+use kartik\slider\Slider;
 use Yii;
 use app\models\Document;
 use app\models\DocumentSearch;
@@ -63,12 +64,13 @@ class DocumentController extends Controller
             'senderTown' => $cabinet->town,
             'senderDepartment' => $cabinet->dispatch_dep,
             'serviceType' => 'WarehouseDoors',
+            'cargoType' => 'Cargo',
         ]);
 
         if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
 
 //            $model->sendData();
-            echo '<pre>'.print_r($model).'</pre>';
+            echo '<pre>' . print_r($model) . '</pre>';
             exit();
 //            return $this->redirect(['index', 'id' => $cabinet->id]);
         }
@@ -137,6 +139,11 @@ class DocumentController extends Controller
                 throw new NotFoundHttpException('Ошибка загрузки данных');
             }
         }
+    }
+
+    public function actionSetSlider()
+    {
+        return $this->renderAjax('create-parts/_slider');
     }
 
     /**

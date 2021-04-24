@@ -20,6 +20,13 @@ $css = <<< CSS
     display:inline-block;
     zoom:1;
 }
+
+.acceptBtn {
+margin-left: 40%;
+margin-right: 40%;
+margin-top: 30px;
+width: 180px;
+}
 CSS;
 $this->registerCss($css);
 
@@ -48,9 +55,10 @@ $this->registerCss($css);
             <?= $this->render('create-parts/_create_part2', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
         <div class="tab-pane" id="payment">
+            <?= $this->render('create-parts/_create_part3', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
     </div>
-    <?=Html::submitButton('Send')?>
+    <?=Html::submitButton('Создать', ['class' => 'btn btn-primary acceptBtn'])?>
     <?php ActiveForm::end() ?>
 </div>
 

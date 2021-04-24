@@ -85,118 +85,6 @@ $this->registerCss($tabs);
 
 $this->registerJsVar('posts', 0, $this::POS_HEAD);
 
-$sendJs = <<<JS
-function (val) {
-  
-  switch (val)
-  {
-      case 1:
-          {
-              $('#sendWeight').text('до 0.5 кг');
-              $('#sizes').text('15x12x11');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('0.5');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '0.5';
-          }
-      break;
-      case 2:
-          {
-              $('#sendWeight').text('до 1 кг');
-              $('#sizes').text('26x14x11');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('1');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '1';
-          }
-      break;
-      case 3:
-          {
-              $('#sendWeight').text('до 2 кг');
-              $('#sizes').text('33x22x11');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('2');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '2';
-          }
-      break;
-      case 4:
-          {
-              $('#sendWeight').text('до 5 кг');
-              $('#sizes').text('40x25x20');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('5');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '5';
-          }
-      break;
-      case 5:
-          {
-              $('#sendWeight').text('до 10 кг');
-              $('#sizes').text('42x34x28');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('10');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '10';
-          }
-      break;
-      case 6:
-          {
-              $('#sendWeight').text('до 20 кг');
-              $('#sizes').text('50x40x40');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('20');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '20'
-          }
-      break;
-      case 7:
-          {
-              $('#sendWeight').text('до 30 кг');
-              $('#sizes').text('68x43x41');
-              var items=$('#sizes').text().split('x');
-              $('#weight').val('30');
-              $('.cargo-element-length').val(items[0]);
-              $('.cargo-element-width').val(items[1]);
-              $('.cargo-element-height').val(items[2]);
-              $('.overweight').addClass('hidden');
-              return '30'
-          }
-      break;
-      case 8:
-          {
-              $('#sendWeight').text('больше 30 кг');
-              $('#sizes').text('Обязательно');
-              $('.cargo-element-weight').val('30');
-              $('.cargo-element-length').val('');
-              $('.cargo-element-width').val('');
-              $('.cargo-element-height').val('');
-              $('.overweight').removeClass('hidden');
-              return '30+';
-          }
-      break;
-  }
-}
-JS;
-
 $documentsJs = <<<JS
 function (val) {
   switch (val)
@@ -204,14 +92,14 @@ function (val) {
       case 1:
           {
               $('#documentWeight').text('до 0.5 кг');
-              $('#weightToWrite').text('0.5');
+              $('.cargo-element-weight').val('0.5');
               return '0.5';
           }
       break;
       case 2:
           {
               $('#documentWeight').text('до 1 кг');
-              $('#weightToWrite').text('1');
+              $('.cargo-element-weight').val('1');
               return '1';
           }
       break;
@@ -221,8 +109,37 @@ JS;
 
 
 $mainJs = <<<JS
-$(document).on('click', '#sizes', function() {
-  $('#sizesDataModal').modal('show');
+$(document).on('click', '.sizes', function() {
+  var clicked=$(this);
+  var items=['', '', ''];
+  if (clicked.text()!=='Обязательно')
+  {
+      items=clicked.text().split('x');
+  }
+  $(document).find('#sizesDataModal').ready(function() {
+      $('#modal-cargo-element-length').val(items[0]);
+      $('#modal-cargo-element-width').val(items[1]);
+      $('#modal-cargo-element-height').val(items[2]);
+    });
+    
+    $(document).find('#sizesDataModal').on('click', '#save-sizes-data', function() {
+      var sizesData = $('#sizesDataModal').find('.form-control');
+       
+      var data = [
+        $('#'+sizesData[0].id).val(),
+        $('#'+sizesData[1].id).val(),
+        $('#'+sizesData[2].id).val(),
+      ];
+      
+      if (data[0]!=='' && data[1]!=='' && data[2]!=='')
+      {
+        clicked.text(data[0]+'x'+data[1]+'x'+data[2]);
+        
+        $(document).find('#sizesDataModal').modal('hide');
+      }
+      else alert ('Заполните все необходимые поля');
+    });
+    $(document).find('#sizesDataModal').modal('show');
 });
 
 $('#addPlace').on('click', function() {
@@ -234,8 +151,21 @@ $('#addPlace').on('click', function() {
   $('.removeElement').removeClass('hidden');
   
   new_cargo_element.find('.placeNum').text('Место №'+(posts+1));
-  //var new_slider = new_cargo_element.find('.slider');
+  var new_slider = new_cargo_element.find('#slider');
+  new_cargo_element.find('#w1-slider').attr('name', 'DocumentCreateRequest[seatParams]['+posts+'][weight]');
+  //console.log(new_cargo_element.find('.slider').slider());
+  //new_cargo_element.find('#w1-slider').remove();
   //$('.cargo-list').find(new_slider).attr('name', 'DocumentCreateRequest[seatParams]['+posts+'][weight]');
+  
+  $.ajax({
+    type: 'POST',
+    url: '/document/set-slider',
+  }).done(function(msg) {
+    
+    //new_slider.append(msg);
+    console.log(new_slider);
+    console.log(msg);
+  });
   
   new_cargo_element.find('.cargo-element-length').attr('name','DocumentCreateRequest[seatParams]['+posts+'][length]');
   new_cargo_element.find('.cargo-element-width').attr('name','DocumentCreateRequest[seatParams]['+posts+'][width]');
@@ -264,11 +194,21 @@ $(document).on('click', '.removeElement', function() {
       if (posts===0) $(document).find('.removeElement').addClass('hidden');
   }
   //$(el).attr('name','DocumentCreateRequest[seatParams]['+posts+'][weight]')
-})
+});
+
+$('#cargo-type-send').on('click', function() {
+  $('.cargo-element-type').val('Cargo');
+});
+
+$('#cargo-type-documents').on('click', function() {
+  $('.cargo-element-type').val('Documents');
+});
 JS;
 $this->registerJs($mainJs);
 
 ?>
+
+<?= Html::input('text', 'DocumentCreateRequest[cargoType]', '', ['class' => 'cargo-element-type hidden']) ?>
 
 <div class="cargo-header"><b>Тип груза</b></div>
 
@@ -294,22 +234,12 @@ $this->registerJs($mainJs);
                     <div class="element-slider">
                         <?= Html::label('Вес посылки: ') ?>
                         <?= Html::label('до 0.5 кг', null, ['id' => 'sendWeight', 'class' => 'labelWeight']) ?><br/>
-                        <?= Slider::widget([
-                            'name' => 'sliderOptionsSend',
-                            'sliderColor' => Slider::TYPE_DANGER,
-                            'handleColor' => Slider::TYPE_DANGER,
-                            'pluginOptions' => [
-                                'min' => 1,
-                                'max' => 8,
-                                'step' => 1,
-                                'ticks' => [1, 2, 3, 4, 5, 6, 7, 8],
-                                'formatter' => new \yii\web\JsExpression($sendJs),
-                            ]
-                        ]) ?>
-
-                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][length]', '', ['class' => ' hidden']) ?>
-                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][width]', '', ['class' => ' hidden']) ?>
-                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][height]', '', ['class' => ' hidden']) ?>
+                        <div id="slider">
+                            <?= $this->render('_slider'); ?>
+                        </div>
+                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][length]', '', ['class' => 'cargo-element-length hidden']) ?>
+                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][width]', '', ['class' => 'cargo-element-width hidden']) ?>
+                        <?= Html::input('text', 'DocumentCreateRequest[seatParams][0][height]', '', ['class' => 'cargo-element-height hidden']) ?>
 
                     </div>
                     <div class="element-footer">
@@ -319,8 +249,7 @@ $this->registerJs($mainJs);
                         </div>
                         <b><?= Html::label('Габариты') ?></b>
                         <div class="element-footer-right">
-                            <?= Html::label('15x12x11', null, ['id' => 'sizes']) ?> <span
-                                    class="glyphicon glyphicon-resize-full"></span>
+                            <?= Html::label('15x12x11', null, ['class' => 'sizes']) ?> <span class="glyphicon glyphicon-resize-full"></span>
                         </div>
                     </div>
 
