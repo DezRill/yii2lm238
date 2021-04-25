@@ -11,6 +11,7 @@ use app\models\Document;
 use app\models\DocumentSearch;
 use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -73,16 +74,21 @@ class DocumentController extends Controller
 
         if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
 
-//            $model->sendData();
-            debug($model);
-            exit();
-//            return $this->redirect(['index', 'id' => $cabinet->id]);
+            $model->seatsAmount = count($model->seatParams);
+            $model->sendData($cabinet->api_key, $cabinet->id);
+
+            $newDocument = Document::findOne(Document::find()->max('id'));
+
+            return $this->redirect(['update', 'id' => $newDocument->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
             'cabinet' => $cabinet,
         ]);
+
+
+        //return $this->redirect(['index', 'id'=>$cabinet->id]);
     }
 
     /**

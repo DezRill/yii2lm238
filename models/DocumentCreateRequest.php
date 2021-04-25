@@ -114,19 +114,16 @@ class DocumentCreateRequest extends Model
     }
 
 
-    public function sendData($apiKey)
+    public function sendData($apiKey, $id)
     {
         $client = new Client();
-        $request=$client->createRequest()
+        $request = $client->createRequest()
             ->setFormat(Client::FORMAT_JSON)
             ->setUrl('https://api.novaposhta.ua/v2.0/json/');
 
-        if ($this->serviceType==='WarehouseWarehouse')
-        {
-            if($this->cargoType==='Cargo')
-            {
-                if ($this->redelivery===0)
-                {
+        if ($this->serviceType == 'WarehouseWarehouse') {
+            if ($this->cargoType == 'Cargo') {
+                if ($this->redelivery == 0) {
                     $request->setData([
                         'apiKey' => $apiKey,
                         'modelName' => 'InternetDocument',
@@ -156,19 +153,9 @@ class DocumentCreateRequest extends Model
                             'RecipientType' => 'PrivatePerson',
                             'RecipientsPhone' => $this->recipientsPhone,
                             'DateTime' => $this->date
-
                         ]
-                    ])->send();
-                }
-                else if ($this->redelivery===1)
-                {
-
-                }
-            }
-            else if ($this->cargoType==='Documents')
-            {
-                if ($this->redelivery===0)
-                {
+                    ]);
+                } else if ($this->redelivery == 1) {
                     $request->setData([
                         'apiKey' => $apiKey,
                         'modelName' => 'InternetDocument',
@@ -178,7 +165,45 @@ class DocumentCreateRequest extends Model
                             'PayerType' => $this->payerType,
                             'PaymentMethod' => 'Cash',
                             'CargoType' => $this->cargoType,
-                            'VolumeGeneral' => '0.005',
+                            'OptionsSeat' => $this->seatParams,
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => '1',
+                            'RecipientHouse' => '',
+                            'RecipientFlat' => '',
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date,
+                            'BackwardDeliveryData' => [
+                                'PayerType' => $this->redeliveryPayer,
+                                'CargoType' => 'Money',
+                                'RedeliveryString' => $this->redeliveryValue
+                            ]
+                        ]
+                    ]);
+                }
+            } else if ($this->cargoType == 'Documents') {
+                if ($this->redelivery == 0) {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
                             'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
                             'ServiceType' => $this->serviceType,
                             'SeatsAmount' => $this->seatsAmount,
@@ -199,22 +224,50 @@ class DocumentCreateRequest extends Model
                             'RecipientType' => 'PrivatePerson',
                             'RecipientsPhone' => $this->recipientsPhone,
                             'DateTime' => $this->date
-
                         ]
-                    ])->send();
-                }
-                else if ($this->redelivery===1)
-                {
-
+                    ]);
+                } else if ($this->redelivery == 1) {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => '1',
+                            'RecipientHouse' => '',
+                            'RecipientFlat' => '',
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date,
+                            'BackwardDeliveryData' => [
+                                'PayerType' => $this->redeliveryPayer,
+                                'CargoType' => 'Money',
+                                'RedeliveryString' => $this->redeliveryValue
+                            ]
+                        ]
+                    ]);
                 }
             }
-        }
-        else if ($this->serviceType==='WarehouseDoors')
-        {
-            if($this->cargoType==='Cargo')
-            {
-                if ($this->redelivery===0)
-                {
+        } else if ($this->serviceType == 'WarehouseDoors') {
+            if ($this->cargoType == 'Cargo') {
+                if ($this->redelivery == 0) {
                     $request->setData([
                         'apiKey' => $apiKey,
                         'modelName' => 'InternetDocument',
@@ -244,19 +297,9 @@ class DocumentCreateRequest extends Model
                             'RecipientType' => 'PrivatePerson',
                             'RecipientsPhone' => $this->recipientsPhone,
                             'DateTime' => $this->date
-
                         ]
-                    ])->send();
-                }
-                else if ($this->redelivery===1)
-                {
-
-                }
-            }
-            else if ($this->cargoType==='Documents')
-            {
-                if ($this->redelivery===0)
-                {
+                    ]);
+                } else if ($this->redelivery == 1) {
                     $request->setData([
                         'apiKey' => $apiKey,
                         'modelName' => 'InternetDocument',
@@ -266,7 +309,45 @@ class DocumentCreateRequest extends Model
                             'PayerType' => $this->payerType,
                             'PaymentMethod' => 'Cash',
                             'CargoType' => $this->cargoType,
-                            'VolumeGeneral' => '0.005',
+                            'OptionsSeat' => $this->seatParams,
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => $this->street,
+                            'RecipientHouse' => $this->house,
+                            'RecipientFlat' => $this->flat,
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date,
+                            'BackwardDeliveryData' => [
+                                'PayerType' => $this->redeliveryPayer,
+                                'CargoType' => 'Money',
+                                'RedeliveryString' => $this->redeliveryValue
+                            ]
+                        ]
+                    ]);
+                }
+            } else if ($this->cargoType == 'Documents') {
+                if ($this->redelivery == 0) {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
                             'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
                             'ServiceType' => $this->serviceType,
                             'SeatsAmount' => $this->seatsAmount,
@@ -287,17 +368,60 @@ class DocumentCreateRequest extends Model
                             'RecipientType' => 'PrivatePerson',
                             'RecipientsPhone' => $this->recipientsPhone,
                             'DateTime' => $this->date
-
                         ]
-                    ])->send();
-                }
-                else if ($this->redelivery===1)
-                {
-
+                    ]);
+                } else if ($this->redelivery == 1) {
+                    $request->setData([
+                        'apiKey' => $apiKey,
+                        'modelName' => 'InternetDocument',
+                        'calledMethod' => 'save',
+                        'methodProperties' => [
+                            'NewAddress' => '1',
+                            'PayerType' => $this->payerType,
+                            'PaymentMethod' => 'Cash',
+                            'CargoType' => $this->cargoType,
+                            'Weight' => ArrayHelper::getValue($this->seatParams, '0.weight'),
+                            'ServiceType' => $this->serviceType,
+                            'SeatsAmount' => $this->seatsAmount,
+                            'Description' => $this->description,
+                            'Cost' => $this->cost,
+                            'CitySender' => $this->senderTown,
+                            'Sender' => $this->sender,
+                            'SenderAddress' => $this->senderDepartment,
+                            'ContactSender' => $this->contactSender,
+                            'SendersPhone' => $this->sendersPhone,
+                            'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
+                            'RecipientArea' => '',
+                            'RecipientAreaRegions' => '',
+                            'RecipientAddressName' => $this->street,
+                            'RecipientHouse' => $this->house,
+                            'RecipientFlat' => $this->flat,
+                            'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
+                            'RecipientType' => 'PrivatePerson',
+                            'RecipientsPhone' => $this->recipientsPhone,
+                            'DateTime' => $this->date,
+                            'BackwardDeliveryData' => [
+                                'PayerType' => $this->redeliveryPayer,
+                                'CargoType' => 'Money',
+                                'RedeliveryString' => $this->redeliveryValue
+                            ]
+                        ]
+                    ]);
                 }
             }
         }
 
-        return $request->data;
+        $request = $request->send();
+
+        if ($request->data['success'])
+        {
+            $model=new Document();
+            $model->cabinet_id=$id;
+            $model->document_num=ArrayHelper::getValue($request->data, 'data.0.IntDocNumber');
+            $model->date=date('Ymd');
+            $model->time=date('His');
+            $model->current_status=1;
+            $model->save();
+        }
     }
 }

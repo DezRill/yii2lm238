@@ -114,9 +114,9 @@ $this->registerCss($acceptBtnStyle);
 
 <div class="form-group">
     <?= \yii\helpers\Html::label('Город', null, ['class' => 'control-label']) ?>
-    <?= \kartik\select2\Select2::widget(['initValueText' => null,
-        'model' => $model,
-        'attribute' => 'recipientTown',
+    <?= \kartik\select2\Select2::widget([
+        'initValueText' => null,
+        'name' => 'recipientTown',
         'options' => ['class' => 'form-control'],
         'pluginOptions' => [
             'allowClear' => true,
