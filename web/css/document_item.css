@@ -7,7 +7,7 @@
 }
 
 .document-content {
-    margin-left: 120px;
+    margin-left: 160px;
     color: #737373;
     font-size: 13px;
 }
@@ -54,4 +54,14 @@
     border: none;
     border-top: 1px solid #333;
     box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+.check-item-action {
+    float: left;
+    margin: 27px 15px 15px 15px;
+    transform: scale(1.5);
+}
+
+.massive-operations {
+    float: right;
 }

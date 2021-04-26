@@ -14,53 +14,20 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile("@web/css/item.css");
 $this->registerCssFile("@web/css/document_item.css");
 
-
-$js = <<<JS
-$(document).on('click','.load-status',function(e) {
-  e.preventDefault();
-  var _this = $(this),
-      url =_this.attr('href');
-      status_selector = _this.data('target');
-      status_element = $(document).find(status_selector);
-      
-   if(!status_element.length){
-       return true;
-   }
-   
-   $.get(url,{}, function(response) {
-        status_element.removeAttr('class');
-        var text_block =status_element.children('b');
-        text_block.text('');
-        
-     switch (response.state){
-         case 1:
-                status_element.addClass('formalized');
-                text_block.text('Оформление');
-            break;
-         case 2:
-             status_element.addClass('sent');
-             text_block.text('Отправлено');
-            break;
-         case 3:
-             status_element.addClass('delivered');
-             text_block.text('Доставлено');
-            break;
-         case 4:
-             status_element.addClass('failure');
-             text_block.text('Отказ');
-            break;
-     }
-   });
-})
-JS;
-$this->registerJs($js, $this::POS_END);
+$this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
 <div class="document-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+    <div class="actions-div">
         <?= Html::a('Создать накладную', ['create', 'id' => $cabinet->id], ['class' => 'btn btn-success']) ?>
+        <div class="massive-operations">
+            <?= Html::button('<span class="glyphicon glyphicon-repeat"></span>' . ' Обновить статус', ['class' => 'btn btn-primary', 'id' => 'updateAllBtn']) ?>
+            <?= Html::button('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['class' => 'btn btn-danger', 'id' => 'deleteAllBtn']) ?>
+        </div>
+    </div>
     </p>
 
     <?= ListView::widget([

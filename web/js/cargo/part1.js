@@ -1,3 +1,7 @@
+/**
+ * На случай ошибки заполнения данных, чтобы сразу нужные поля отображались с нужной информацией
+ */
+
 $(document).ready(function () {
     var recipientData = $('#recipientDataModal').find('.form-control');
 
@@ -20,6 +24,10 @@ $(document).ready(function () {
     }
 });
 
+/**
+ * Отображение и скрытие полей при смене чека
+ */
+
 $(document).on('change', 'input:radio', function () {
     var pressed = $(this);
     switch (pressed.val()) {
@@ -35,6 +43,10 @@ $(document).on('change', 'input:radio', function () {
             break;
     }
 });
+
+/**
+ * Если какие-то поля об контрагентах не заполнены, перейти на вкладку груза нельзя будет
+ */
 
 $(document).find('#parcel_tab').on('click', function (e) {
     switch ($('input:radio:checked').val()) {

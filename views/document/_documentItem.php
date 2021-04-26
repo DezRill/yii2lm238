@@ -10,21 +10,24 @@ use yii\helpers\Html;
 <hr class="hr-line"/>
 <div class="post-container">
     <div class="document-menu">
-        <p><?= Html::a('<span class="glyphicon glyphicon-pencil"> Открыть</span>', ['update', 'id' => $model->id], ['class' => 'btn btn-success btn-item']) ?></p>
-        <p><?= Html::a('<span class="glyphicon glyphicon-trash"> Удалить</span>', ['delete', 'id' => $model->id], [
+        <p><?= Html::a('<span class="glyphicon glyphicon-pencil"></span>' . ' Открыть', ['update', 'id' => $model->id], ['class' => 'btn btn-success btn-item']) ?></p>
+        <p><?= Html::a('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger btn-item',
                 'data' => [
                     'confirm' => 'Вы уверены, что хотите удалить накладную?',
                     'method' => 'post',
                 ],
             ]) ?></p>
-        <p><?= Html::a('<span class="glyphicon glyphicon-repeat"> Обновить статус</span>', ['update-status', 'id' => $model->id], [
+        <p><?= Html::a('<span class="glyphicon glyphicon-repeat"></span>' . ' Обновить статус', ['update-status', 'id' => $model->id], [
                 'class' => 'btn btn-primary btn-item load-status',
                 'data-target'=>"#status_".$model->id
             ]) ?></p>
     </div>
     <div class="post-title">
         Декларация доставки
+    </div>
+    <div class="check-item-action">
+        <input type="checkbox" class="form-check-input", href="/document/update-status?id=<?= $model->id ?>" data-target="#status_<?= $model->id ?>">
     </div>
     <div class="document-thumb">
         <? switch ($model->current_status) {
@@ -45,8 +48,8 @@ use yii\helpers\Html;
                 $class = "failure";
                 break;
             default:
-                $text = "";
-                $class = "";
+                $text = "ERROR";
+                $class = "failure";
                 break;
         }?>
         <div class="<?=$class?>" id="status_<?=$model->id?>"><b><?=$text?></b></div>

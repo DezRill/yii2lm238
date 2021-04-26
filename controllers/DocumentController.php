@@ -84,7 +84,7 @@ class DocumentController extends Controller
 
                     return $this->redirect(['update', 'id' => $newDocument->id]);
                 } else {
-                    Yii::$app->session->setFlash('danger', 'Ошибка при создании накладной. Не все данные заполнены.');
+                    Yii::$app->session->setFlash('danger', 'Ошибка при создании накладной. Пожалуйста, проверьте корректность данных.');
                 }
             } else {
                 Yii::$app->session->setFlash('danger', 'Ошибка при заполнении данных. Пожалуйста, попробуйте ещё раз.');
@@ -144,6 +144,19 @@ class DocumentController extends Controller
         return $this->redirect(['index', 'id' => $c_id]);
     }
 
+    public function actionMassiveDelete()
+    {
+        $ids = Yii::$app->request->post('ids');
+        if (!empty($ids)) {
+            $model = Document::findOne($ids[0]);
+            foreach ($ids as $id) {
+                $model = $this->findModel($id);
+                $model->delete();
+            }
+            return $this->redirect(['index', 'id' => $model->cabinet_id]);
+        }
+    }
+
     public function actionUpdateStatus($id)
     {
         $model = $this->findModel($id);
@@ -151,9 +164,10 @@ class DocumentController extends Controller
             try {
                 $model->current_status = $model->updateStatus($cabinet->api_key);
                 $model->save();
+                //Yii::$app->session->setFlash('success', 'Данные успешно обновлены.');
                 return $this->asJson(['state' => $model->current_status]);
             } catch (ErrorException $e) {
-                throw new NotFoundHttpException('Ошибка загрузки данных');
+                //Yii::$app->session->setFlash('danger', 'Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
             }
         }
     }
