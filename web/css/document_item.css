@@ -58,8 +58,12 @@
 
 .check-item-action {
     float: left;
-    margin: 27px 15px 15px 15px;
-    transform: scale(1.5);
+    margin: 27px 27px 15px 7px;
+    transform: scale(2);
+}
+
+#checkAll {
+    margin-left: 13.5px;
 }
 
 .massive-operations {

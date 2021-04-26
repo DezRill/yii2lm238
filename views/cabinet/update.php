@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = 'Редактировать кабинет';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Удалить кабинет', ['delete', 'id' => $model->id], [
+    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> Удалить кабинет', ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger',
         'data' => [
             'confirm' => 'Вы уверены, что хотите удалить кабинет?',

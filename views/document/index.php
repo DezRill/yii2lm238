@@ -26,7 +26,7 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
 
     <p>
     <div class="actions-div">
-        <?= Html::a('Создать накладную', ['create', 'id' => $cabinet->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-file"></span> Создать накладную', ['create', 'id' => $cabinet->id], ['class' => 'btn btn-success']) ?>
         <div class="massive-operations">
             <?= Html::button('<span class="glyphicon glyphicon-repeat"></span>' . ' Обновить статус', ['class' => 'btn btn-primary', 'id' => 'updateAllBtn']) ?>
             <?= Html::button('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['class' => 'btn btn-danger', 'id' => 'deleteAllBtn']) ?>
@@ -42,5 +42,9 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
     ?>
 
     <hr class="hr-line"/>
+
+    <div class="check-item-action">
+        <input type="checkbox" class="form-check-input" id="checkAll">
+    </div>
 
 </div>

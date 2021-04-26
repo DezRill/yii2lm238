@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
         'id' => 'modal-window',
         'header' => '<h2>Выберите иконку</h2>',
         'toggleButton' => [
-            'label' => 'Иконка...',
+            'label' => '<span class="glyphicon glyphicon-picture"></span> Иконка...',
             'tag' => 'button',
             'class' => 'btn btn-primary',
         ],
@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
     <?php endif; ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-save"></span> Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

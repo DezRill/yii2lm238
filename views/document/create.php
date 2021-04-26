@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $this->render('create-parts/_create_part3', ['model' => $model, 'cabinet' => $cabinet, 'form' => $form]) ?>
         </div>
     </div>
-    <?= Html::submitButton('Создать', ['class' => 'btn btn-primary acceptBtn']) ?>
+    <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> Создать', ['class' => 'btn btn-primary acceptBtn']) ?>
     <?php ActiveForm::end() ?>
 </div>
 

@@ -129,3 +129,8 @@ $(document).on('click', '#deleteAllBtn', function (e) {
         }
     }
 });
+
+$(document).on('click', '#checkAll', function () {
+    if(this.checked) $(document).find('.list-view input:checkbox').prop('checked', true);
+    else $(document).find('.list-view input:checkbox').prop('checked', false);
+});

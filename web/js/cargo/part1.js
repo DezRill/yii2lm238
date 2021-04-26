@@ -4,21 +4,33 @@
 
 $(document).ready(function () {
     var recipientData = $('#recipientDataModal').find('.form-control');
+    var addressData = $('#addressDataModal').find('.form-control');
 
-    var data = [
+    var dataRecipient = [
         $('#' + recipientData[0].id).val(),
         $('#' + recipientData[1].id).val(),
         $('#' + recipientData[2].id).val(),
         $('#' + recipientData[3].id).val()
     ];
 
-    if (data[0] !== '' && data[1] !== '' && data[2] !== '') {
-        $(document).find('#recipient').val(data[2] + ' ' + data[1] + ' ' + data[3] + ', ' + data[0]);
+    var dataAddress = [
+        $('#recipientTown').find('option').last(),
+        $('#' + addressData[1].id).val(),
+        $('#' + addressData[2].id).val(),
+        $('#' + addressData[3].id).val()
+    ];
+
+    if (dataRecipient[0] !== '' && dataRecipient[1] !== '' && dataRecipient[2] !== '') {
+        $(document).find('#recipient').val(dataRecipient[2] + ' ' + dataRecipient[1] + ' ' + dataRecipient[3] + ', ' + dataRecipient[0]);
+    }
+
+    if (dataAddress[0].text() !== '' && dataAddress[1] !== '' && dataAddress[2] !== '' && dataAddress[3] !== '') {
+        $(document).find('#address').val(dataAddress[0].text() + ', ' + dataAddress[1] + ' ' + dataAddress[2]);
+        $(document).find('#townToAddressModal').append(dataAddress[0]);
     }
 
     var pressed = $('input[type=radio]:checked');
-    if (pressed.val()==='WarehouseWarehouse')
-    {
+    if (pressed.val() === 'WarehouseWarehouse') {
         $('#address-group').addClass('hidden');
         $('#department-group').removeClass('hidden');
     }

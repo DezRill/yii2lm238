@@ -13,24 +13,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="delivery-service-view">
     <p>
         <?php if (!$dataProvider) : ?>
-            <h1><?= Html::encode($this->title) ?></h1>
-            <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Вы уверены, что хотите удалить службу доставки?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-            <?= $this->render('_delivery_view', ['model' => $model]); ?>
-        <?php else : ?>
-            <?= Html::a('Редактировать службу', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <h1><?= Html::encode('Кабинеты') ?></h1>
-            <?= Html::a('Создать кабинет', ['cabinet/create'], ['class' => 'btn btn-success']) ?><br/><br/>
-            <?= \yii\widgets\ListView::widget([
-                'dataProvider' => $dataProvider,
-                'itemView' => '_np_cabinets',
-            ]); ?>
-        <?php endif; ?>
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> Удалить', ['delete', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => 'Вы уверены, что хотите удалить службу доставки?',
+            'method' => 'post',
+        ],
+    ]) ?>
+    <?= $this->render('_delivery_view', ['model' => $model]); ?>
+    <?php else : ?>
+        <?= Html::a('<span class="glyphicon glyphicon-pencil"></span> Редактировать службу', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <h1><?= Html::encode('Кабинеты') ?></h1>
+        <?= Html::a('<span class="glyphicon glyphicon-user"></span> Создать кабинет', ['cabinet/create'], ['class' => 'btn btn-success']) ?>
+        <br/><br/>
+        <?= \yii\widgets\ListView::widget([
+            'dataProvider' => $dataProvider,
+            'itemView' => '_np_cabinets',
+        ]); ?>
+    <?php endif; ?>
     </p>
 </div>

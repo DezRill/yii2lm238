@@ -155,7 +155,7 @@ JS;
     ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success', 'id' => 'saveCabinetButton', 'disabled' => true]) ?>
+        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-save"></span> Сохранить', ['class' => 'btn btn-success', 'id' => 'saveCabinetButton', 'disabled' => true]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

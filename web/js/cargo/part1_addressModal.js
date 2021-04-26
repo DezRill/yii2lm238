@@ -1,11 +1,11 @@
 $('#addressDataModal').on('click', '#save-address-data', function() {
-    var recipientData = $('#addressDataModal').find('.form-control');
+    var addressData = $('#addressDataModal').find('.form-control');
 
     var data = [
-        $('#'+recipientData[0].id).find('option').last(),
-        $('#'+recipientData[1].id).val(),
-        $('#'+recipientData[2].id).val(),
-        $('#'+recipientData[3].id).val()
+        $('#'+addressData[0].id).find('option').last(),
+        $('#'+addressData[1].id).val(),
+        $('#'+addressData[2].id).val(),
+        $('#'+addressData[3].id).val()
     ];
 
     if (data[0].text()!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')

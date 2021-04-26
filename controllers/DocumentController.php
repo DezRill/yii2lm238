@@ -80,11 +80,11 @@ class DocumentController extends Controller
                 if ($model->sendData($cabinet->api_key, $cabinet->id)) {
                     $newDocument = Document::findOne(Document::find()->max('id'));
 
-                    Yii::$app->session->setFlash('success', 'Накладная <b>№' . $newDocument->document_num . '</b> успешно создана.');
+                    Yii::$app->session->setFlash('success', '<span class="glyphicon glyphicon-ok-sign"></span>Накладная <b>№' . $newDocument->document_num . '</b> успешно создана.');
 
                     return $this->redirect(['update', 'id' => $newDocument->id]);
                 } else {
-                    Yii::$app->session->setFlash('danger', 'Ошибка при создании накладной. Пожалуйста, проверьте корректность данных.');
+                    Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка при создании накладной. Пожалуйста, проверьте корректность данных.');
                 }
             } else {
                 Yii::$app->session->setFlash('danger', 'Ошибка при заполнении данных. Пожалуйста, попробуйте ещё раз.');
@@ -140,6 +140,7 @@ class DocumentController extends Controller
         $model = $this->findModel($id);
         $c_id = $model->cabinet_id;
         $model->delete();
+        Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладная удалена.');
 
         return $this->redirect(['index', 'id' => $c_id]);
     }
@@ -152,7 +153,7 @@ class DocumentController extends Controller
             foreach ($ids as $id) {
                 $model = $this->findModel($id);
                 $model->delete();
-                Yii::$app->session->setFlash('warning', 'Накладные успешно удалены.');
+                Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладные удалены.');
                 return $this->renderAjax('_messages');
             }
             return $this->redirect(['index', 'id' => $model->cabinet_id]);
@@ -176,11 +177,11 @@ class DocumentController extends Controller
     {
         switch ($result){
             case 0:
-                Yii::$app->session->setFlash('success', 'Данные успешно обновлены.');
+                Yii::$app->session->setFlash('success', '<span class="glyphicon glyphicon-ok-sign"></span> Данные успешно обновлены.');
                 return $this->renderAjax('_messages');
             break;
             case 1:
-                Yii::$app->session->setFlash('danger', 'Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
+                Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span>Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
                 return $this->renderAjax('_messages');
             break;
         }
