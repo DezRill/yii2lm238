@@ -32,6 +32,10 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
             <?= Html::button('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['class' => 'btn btn-danger', 'id' => 'deleteAllBtn']) ?>
         </div>
     </div>
+    <div class="check-item-action">
+        <input type="checkbox" class="form-check-input" id="checkAll">
+    </div>
+    <br/><br/><br/>
     </p>
 
     <?= ListView::widget([
@@ -42,9 +46,5 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
     ?>
 
     <hr class="hr-line"/>
-
-    <div class="check-item-action">
-        <input type="checkbox" class="form-check-input" id="checkAll">
-    </div>
 
 </div>

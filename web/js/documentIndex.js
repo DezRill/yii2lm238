@@ -41,7 +41,8 @@ $(document).on('click', '.load-status', function (e) {
                 url:'/document/render-notification?result=0'
             }).done(function (msg) {
                 $('.flash-notification').html(msg);
-            })
+            });
+            $(document).find('input:checkbox').prop('checked', false);
         },
         error: function () {
             $.ajax({
@@ -94,7 +95,8 @@ $(document).on('click', '#updateAllBtn', function (e) {
                         url:'/document/render-notification?result=0'
                     }).done(function (msg) {
                         $('.flash-notification').html(msg);
-                    })
+                    });
+                    $(document).find('input:checkbox').prop('checked', false);
                 },
                 error: function () {
                     $.ajax({
@@ -125,6 +127,8 @@ $(document).on('click', '#deleteAllBtn', function (e) {
                 type: "POST",
                 url: '/document/massive-delete',
                 data: {ids: ids}
+            }).done(function () {
+                $(document).find('input:checkbox').prop('checked', false);
             });
         }
     }
