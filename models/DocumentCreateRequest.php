@@ -61,7 +61,6 @@ class DocumentCreateRequest extends Model
                     'cargoType',
                     'cost',
                     'payerType',
-                    'seatsAmount'
                 ],
                 'required', 'message' => 'Поля должны быть заполнены'
             ],
@@ -71,9 +70,7 @@ class DocumentCreateRequest extends Model
                     'sender',
                     'senderTown',
                     'senderDepartment',
-                    'sendersPhone',
                     'serviceType',
-                    'recipientsPhone',
                     'firstName',
                     'secondName',
                     'lastName',
@@ -94,24 +91,23 @@ class DocumentCreateRequest extends Model
                     'flat',
                     'cost',
                     'redeliveryValue',
-                    'seatsAmount',
                 ],
                 'integer', 'message' => 'Только целые числа'
             ],
-            [['seatParams'], 'safe'],
-            [['seatParams'], 'seatValidation'],
+            [['seatParams', 'seatsAmount'], 'safe'],
+            //[['seatParams'], 'seatValidation'],
         ];
     }
 
 
-    public function seatValidation($attr)
+    /*public function seatValidation($attr)
     {
         foreach ($this->$attr as $item) {
             if (empty($item['weight']) || empty($item['length']) || empty($item['width']) || empty($item['height'])) {
                 $this->addError($attr, 'Поля должны быть заполнены');
             }
         }
-    }
+    }*/
 
 
     public function sendData($apiKey, $id)
@@ -146,7 +142,7 @@ class DocumentCreateRequest extends Model
                             'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
                             'RecipientArea' => '',
                             'RecipientAreaRegions' => '',
-                            'RecipientAddressName' => '1',
+                            'RecipientAddressName' => $this->recipientDepartment,
                             'RecipientHouse' => '',
                             'RecipientFlat' => '',
                             'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
@@ -178,7 +174,7 @@ class DocumentCreateRequest extends Model
                             'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
                             'RecipientArea' => '',
                             'RecipientAreaRegions' => '',
-                            'RecipientAddressName' => '1',
+                            'RecipientAddressName' => $this->recipientDepartment,
                             'RecipientHouse' => '',
                             'RecipientFlat' => '',
                             'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
@@ -217,7 +213,7 @@ class DocumentCreateRequest extends Model
                             'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
                             'RecipientArea' => '',
                             'RecipientAreaRegions' => '',
-                            'RecipientAddressName' => '1',
+                            'RecipientAddressName' => $this->recipientDepartment,
                             'RecipientHouse' => '',
                             'RecipientFlat' => '',
                             'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
@@ -249,7 +245,7 @@ class DocumentCreateRequest extends Model
                             'RecipientCityName' => townRefToDescription($this->recipientTown, $apiKey),
                             'RecipientArea' => '',
                             'RecipientAreaRegions' => '',
-                            'RecipientAddressName' => '1',
+                            'RecipientAddressName' => $this->recipientDepartment,
                             'RecipientHouse' => '',
                             'RecipientFlat' => '',
                             'RecipientName' => $this->firstName . ' ' . $this->secondName . ' ' . $this->lastName,
@@ -423,5 +419,7 @@ class DocumentCreateRequest extends Model
             $model->current_status=1;
             $model->save();
         }
+
+        return $request->data['success'];
     }
 }

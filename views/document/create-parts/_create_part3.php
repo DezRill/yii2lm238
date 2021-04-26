@@ -1,34 +1,11 @@
 <?php
 
 /* @var $this yii\web\View */
-
-use yii\helpers\Html;
-
 /* @var $model app\models\DocumentCreateRequest */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $cabinet app\models\Cabinet */
 
-
-$js = <<<JS
-$(document).find('.redelivery_tab').on('click', function() {
-  var _this = $(this).find('input:radio:checked').val();
-  switch (_this)
-  {
-      case '0':
-          {
-              $(document).find('.redelivery-div').addClass('hidden');
-          }
-      break;
-          
-      case '1':
-          {
-              $(document).find('.redelivery-div').removeClass('hidden');
-          }
-      break;
-  }
-});
-JS;
-$this->registerJs($js);
+$this->registerJsFile('@web/js/cargo/part3.js', ['depends' => 'yii\web\YiiAsset']);
 ?>
 
 <?php

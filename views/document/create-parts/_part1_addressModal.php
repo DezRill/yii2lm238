@@ -5,10 +5,11 @@ use yii\web\JsExpression;
 
 /* @var $form yii\widgets\ActiveForm */
 /* @var $this yii\web\View */
+/* @var $cabinet app\models\Cabinet */
 
 $requestJsTowns = <<<JS
 function(params) {
-    var apiKey = $('#api_key').val();
+    var apiKey = $(document).find('#api_key').val();
     
     var query = JSON.stringify({
         modelName: "Address",
@@ -44,47 +45,7 @@ function (response, params) {
 }
 JS;
 
-$acceptAddress = <<< JS
-$('#addressDataModal').on('click', '#save-address-data', function() {
-  var recipientData = $('#addressDataModal').find('.form-control');
-   
-  var data = [
-    $('#'+recipientData[0].id).find('option').last(),
-    $('#'+recipientData[1].id).val(),
-    $('#'+recipientData[2].id).val(),
-    $('#'+recipientData[3].id).val(),
-  ];
-  
-  if (data[0].text()!=='' && data[1]!=='' && data[2]!=='' && data[3]!=='')
-  {
-      $(document).find('#address').val(data[0].text()+', '+data[1]+' '+data[2]);
-      
-      $(document).find('#recipientTown').append(data[0]);
-
-      $(document).find('#addressDataModal').modal('hide');
-  }
-  else alert ('Заполните все необходимые поля');
-  
-});
-JS;
-$this->registerJs($acceptAddress);
-
-$townChanged = <<<JS
-$('#addressDataModal').on('change', '#townToAddress', function() {
-  var fields = $('#addressDataModal').find('.form-control');
-  
-  $('#'+fields[1].id).each(function() {
-    $('#'+fields[1].id).val("");
-  });
-  $('#'+fields[2].id).each(function() {
-    $('#'+fields[2].id).val("");
-  });
-  $('#'+fields[3].id).each(function() {
-    $('#'+fields[3].id).val("");
-  });
-})
-JS;
-$this->registerJs($townChanged);
+$this->registerJsFile('@web/js/cargo/part1_addressModal.js', ['depends' => 'yii\web\YiiAsset']);
 
 $acceptBtnStyle = <<<CSS
 .btn-save {
@@ -94,29 +55,12 @@ CSS;
 $this->registerCss($acceptBtnStyle);
 ?>
 
-<? /*= $form->field($model, 'recipientTown')->widget(\kartik\select2\Select2::class, [
-    'initValueText' => null,
-    'options' => ['id' => 'townToAddress'],
-    'pluginOptions' => [
-        'allowClear' => true,
-        'minimumInputLength' => 0,
-        'ajax' => [
-            'url' => "https://api.novaposhta.ua/v2.0/json/",
-            'type' => 'POST',
-            'dataType' => 'json',
-            'delay' => 250,
-            'data' => new JsExpression($requestJsTowns),
-            'processResults' => new JsExpression($resultsJsTowns),
-            'cache' => true
-        ]
-    ]
-])->label('Город')*/ ?>
-
 <div class="form-group">
     <?= \yii\helpers\Html::label('Город', null, ['class' => 'control-label']) ?>
     <?= \kartik\select2\Select2::widget([
-        'initValueText' => null,
+        'initValueText' => !is_null($model->recipientTown) ? townRefToDescription($model->recipientTown, $cabinet->api_key) : null,
         'name' => 'recipientTown',
+        'id' => 'townToAddressModal',
         'options' => ['class' => 'form-control'],
         'pluginOptions' => [
             'allowClear' => true,

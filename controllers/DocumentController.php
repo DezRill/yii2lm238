@@ -72,23 +72,30 @@ class DocumentController extends Controller
             'redelivery' => 0,
         ]);
 
-        if ($model->load(Yii::$app->request->post()) /*&& $model->validate()*/) {
+        if ($model->load(Yii::$app->request->post())) {
 
-            $model->seatsAmount = count($model->seatParams);
-            $model->sendData($cabinet->api_key, $cabinet->id);
+            if ($model->validate()) {
+                $model->seatsAmount = count($model->seatParams);
 
-            $newDocument = Document::findOne(Document::find()->max('id'));
+                if ($model->sendData($cabinet->api_key, $cabinet->id)) {
+                    $newDocument = Document::findOne(Document::find()->max('id'));
 
-            return $this->redirect(['update', 'id' => $newDocument->id]);
+                    Yii::$app->session->setFlash('success', 'Накладная <b>№' . $newDocument->document_num . '</b> успешно создана.');
+
+                    return $this->redirect(['update', 'id' => $newDocument->id]);
+                } else {
+                    Yii::$app->session->setFlash('danger', 'Ошибка при создании накладной. Не все данные заполнены.');
+                }
+            } else {
+                Yii::$app->session->setFlash('danger', 'Ошибка при заполнении данных. Пожалуйста, попробуйте ещё раз.');
+                $this->refresh();
+            }
         }
 
         return $this->render('create', [
             'model' => $model,
             'cabinet' => $cabinet,
         ]);
-
-
-        //return $this->redirect(['index', 'id'=>$cabinet->id]);
     }
 
     /**

@@ -104,68 +104,27 @@ function (response, params) {
 }
 JS;
 
-$changeServiceType = <<<JS
-$(document).on('change', 'input:radio', function() {
-  var pressed=$(this);
-  switch (pressed.val())
-  {
-      case 'WarehouseWarehouse':
-          {
-              $('#address-group').addClass('hidden');
-              $('#department-group').removeClass('hidden');
-          }
-      break;
-      case 'WarehouseDoors':
-          {
-              $('#address-group').removeClass('hidden');
-              $('#department-group').addClass('hidden');
-          }
-      break;
-  }
-})
-JS;
-$this->registerJs($changeServiceType);
+$resultsJsDepartmentsRecipient = <<<JS
+function (response, params) {
 
-$checkFields = <<<JS
-$(document).find('#parcel_tab').on('click', function(e) {
-  switch ($('input:radio:checked').val())
-  {
-      case 'WarehouseDoors':
-          {
-              if ($('#address').val()==='' || $('#recipient').val()==='')
-              {
-                  e.preventDefault();
-                  alert('Заполните все необходимые поля');
-                  return false;
-              } 
-          }
-      break;
-          
-      case 'WarehouseWarehouse':
-          {
-              if ($('#recipient').val()==='' || $('#townToDepartment').val()===null || $('#recipientDepartment').val()===null)
-              {
-                  e.preventDefault();
-                  alert('Заполните все необходимые поля');
-                  return false;
-              }
-          }
-      break;
-  }
-})
-JS;
-//$this->registerJs($checkFields);
+    params.page = params.page || 1;
 
-$openModal = <<<JS
-$(document).on('click', '#recipient', function() {
-  $('#recipientDataModal').modal('show');
-});
-
-$(document).on('click', '#address', function() {
-  $('#addressDataModal').modal('show');
-});
+    return {
+        results: response.data.map(function(item) {
+            var text =item["Description"];
+            return {
+                id : item.Number,
+                text : text
+            };
+        }),
+        pagination: {
+            more: (params.page * 30) < Number(response.info.totalCount)
+        }
+    };
+}
 JS;
-$this->registerJs($openModal);
+
+$this->registerJsFile('@web/js/cargo/part1.js', ['depends' => 'yii\web\YiiAsset']);
 
 ?>
 
@@ -239,7 +198,7 @@ $serviceTypeArray = [
 
     <div class="hidden" id="department-group">
         <?= $form->field($model, 'recipientTown')->widget(\kartik\select2\Select2::class, [
-            'initValueText' => null,
+            'initValueText' => !is_null($model->recipientTown) ? townRefToDescription($model->recipientTown, $cabinet->api_key) : null,
             'options' => ['id' => 'recipientTown'],
             'pluginOptions' => [
                 'allowClear' => true,
@@ -257,7 +216,7 @@ $serviceTypeArray = [
         ])->label('Город') ?>
 
         <?= $form->field($model, 'recipientDepartment')->widget(\kartik\select2\Select2::class, [
-            'initValueText' => null,
+            'initValueText' => !is_null($model->recipientDepartment) ? departmentRefToDescription($model->recipientDepartment, $cabinet->api_key) : null,
             'options' => ['id' => 'recipientDepartment'],
             'pluginOptions' => [
                 'allowClear' => true,
@@ -268,7 +227,7 @@ $serviceTypeArray = [
                     'dataType' => 'json',
                     'delay' => 250,
                     'data' => new JsExpression($requestJsDepartmentsRecipient),
-                    'processResults' => new JsExpression($resultsJsDepartments),
+                    'processResults' => new JsExpression($resultsJsDepartmentsRecipient),
                     'cache' => true
                 ]
             ]
@@ -289,7 +248,7 @@ $serviceTypeArray = [
         'id' => 'addressDataModal',
         'header' => '<h2>Адрес</h2>'
     ]);
-    echo $this->render('_part1_addressModal', ['model' => $model, 'form' => $form]);
+    echo $this->render('_part1_addressModal', ['model' => $model, 'form' => $form, 'cabinet' => $cabinet]);
     \yii\bootstrap\Modal::end()
     ?>
 

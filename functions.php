@@ -85,30 +85,6 @@ function getCounterpartyContactPerson($key, $ref)
     return $counterpartyContactPersonArray;
 }
 
-function getTestDocuments($apiKey)
-{
-    $client = new Client();
-
-    $documents = $client->createRequest()
-        ->setFormat(Client::FORMAT_JSON)
-        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-        ->setData([
-            'apiKey' => $apiKey,
-            'modelName' => 'TrackingDocument',
-            'calledMethod' => 'getStatusDocuments',
-            'methodProperties' => [
-                'Documents' => [
-                    [
-                        'DocumentNumber' => '20450376523172',
-                        'Phone' => ''
-                    ]
-                ]
-            ]
-        ])->send();
-
-    return ArrayHelper::getValue($documents->data, 'data.0.StatusCode');
-}
-
 function getPhone($apiKey, $ref)
 {
     $client = new Client();
@@ -126,42 +102,3 @@ function getPhone($apiKey, $ref)
 
     return $phone;
 }
-
-/*function getCity($key, $ref)
-{
-    $client = new Client();
-
-    $senderCity=$client->createRequest()
-        ->setFormat(Client::FORMAT_JSON)
-        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-        ->setData([
-            'apiKey' => $key,
-            'modelName' => 'Address',
-            'calledMethod' => 'getCities',
-            'methodProperties' => [
-                'Ref' => $ref
-            ]
-        ])->send();
-
-    return ArrayHelper::getValue($senderCity->data, 'data.0.Description');
-}
-
-function getAddress($key, $ref)
-{
-    $client = new Client();
-
-    $senderAddress=$client->createRequest()
-        ->setFormat(Client::FORMAT_JSON)
-        ->setUrl('https://api.novaposhta.ua/v2.0/json/')
-        ->setData([
-            'apiKey' => $key,
-            'modelName' => 'Address',
-            'calledMethod' => 'getWarehouses',
-            'methodProperties' => [
-                'CityRef' => $ref
-            ]
-        ])->send();
-
-    //return ArrayHelper::getValue($senderAddress->data, 'data.0');
-    return $senderAddress->data;
-}*/

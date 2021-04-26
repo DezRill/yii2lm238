@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 \app\assets\CargoAsset::register($this);
 ?>
+
 <div class="document-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
