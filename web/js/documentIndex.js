@@ -37,7 +37,8 @@ $(document).on('click', '.load-status', function (e) {
             }
         },
         error: function () {
-            alert("Ошибка загрузки данных")
+            alert("Ошибка загрузки данных");
+            Toast
         }
     });
 });
