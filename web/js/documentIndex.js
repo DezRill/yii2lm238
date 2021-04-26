@@ -35,10 +35,21 @@ $(document).on('click', '.load-status', function (e) {
                     text_block.text('Отказ');
                     break;
             }
+
+            $.ajax({
+                type: "POST",
+                url:'/document/render-notification?result=0'
+            }).done(function (msg) {
+                $('.flash-notification').html(msg);
+            })
         },
         error: function () {
-            alert("Ошибка загрузки данных");
-            Toast
+            $.ajax({
+                type: "POST",
+                url:'/document/render-notification?result=1'
+            }).done(function (msg) {
+                $('.flash-notification').html(msg);
+            })
         }
     });
 });
@@ -78,9 +89,20 @@ $(document).on('click', '#updateAllBtn', function (e) {
                             text_block.text('Отказ');
                             break;
                     }
+                    $.ajax({
+                        type: "POST",
+                        url:'/document/render-notification?result=0'
+                    }).done(function (msg) {
+                        $('.flash-notification').html(msg);
+                    })
                 },
                 error: function () {
-                    alert('Ошибка обновления данных');
+                    $.ajax({
+                        type: "POST",
+                        url:'/document/render-notification?result=1'
+                    }).done(function (msg) {
+                        $('.flash-notification').html(msg);
+                    })
                 }
             });
         });
@@ -103,9 +125,7 @@ $(document).on('click', '#deleteAllBtn', function (e) {
                 type: "POST",
                 url: '/document/massive-delete',
                 data: {ids: ids}
-            }).done(function () {
-                alert('Накладные удалены удалены');
-            })
+            });
         }
     }
 });

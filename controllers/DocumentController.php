@@ -152,6 +152,8 @@ class DocumentController extends Controller
             foreach ($ids as $id) {
                 $model = $this->findModel($id);
                 $model->delete();
+                Yii::$app->session->setFlash('warning', 'Накладные успешно удалены.');
+                return $this->renderAjax('_messages');
             }
             return $this->redirect(['index', 'id' => $model->cabinet_id]);
         }
@@ -164,12 +166,25 @@ class DocumentController extends Controller
             try {
                 $model->current_status = $model->updateStatus($cabinet->api_key);
                 $model->save();
-                //Yii::$app->session->setFlash('success', 'Данные успешно обновлены.');
                 return $this->asJson(['state' => $model->current_status]);
             } catch (ErrorException $e) {
-                //Yii::$app->session->setFlash('danger', 'Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
             }
         }
+    }
+
+    public function actionRenderNotification($result)
+    {
+        switch ($result){
+            case 0:
+                Yii::$app->session->setFlash('success', 'Данные успешно обновлены.');
+                return $this->renderAjax('_messages');
+            break;
+            case 1:
+                Yii::$app->session->setFlash('danger', 'Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
+                return $this->renderAjax('_messages');
+            break;
+        }
+
     }
 
     /**

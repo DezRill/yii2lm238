@@ -18,6 +18,10 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
 ?>
 <div class="document-index">
 
+    <div class="flash-notification">
+
+    </div>
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
