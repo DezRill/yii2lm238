@@ -34,12 +34,13 @@ class Cabinet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['api_key', 'name', 'counterparty', 'contact_person', 'date_end'], 'required', 'message' => 'Поле не должно быть пустым'],
+            [['api_key', 'name', 'counterparty', 'contact_person'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['api_key'], 'string'],
             [['date_end'], 'safe'],
             [['name', 'short_name', 'counterparty', 'contact_person', 'recipient_counterparty', 'town'], 'string', 'max' => 55],
             [['dispatch_dep'], 'string', 'max' => 255],
-            [['counterparty', 'contact_person'], 'compare', 'compareValue' => '0', 'operator' => '!=', 'message' => 'Поле не должно быть пустым.']
+            [['counterparty', 'contact_person'], 'compare', 'compareValue' => '0', 'operator' => '!=', 'message' => 'Поле не должно быть пустым.'],
+            [['api_key'], 'unique', 'message' => 'Кабинет с данным API ключом уже существует'],
         ];
     }
 
@@ -64,7 +65,6 @@ class Cabinet extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        //$this->date_end=Yii::$app->formatter->asDate(strtotime($this->date_end), 'php:Y-m-d');
         $this->date_end=date('Ymd', strtotime($this->date_end));
         return parent::beforeSave($insert);
     }

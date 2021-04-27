@@ -40,7 +40,7 @@ class DocumentSearch extends Document
      */
     public function search($params, $id)
     {
-        $query = Document::find()->where(['cabinet_id' => $id]);
+        $query = Document::find()->where(['cabinet_id' => $id])->orderBy('date DESC');
 
         // add conditions that should always apply here
 

@@ -11,6 +11,7 @@ use yii\httpclient\Client;
  * @property int $id
  * @property int $cabinet_id
  * @property string $document_num
+ * @property string $document_ref
  * @property string $date
  * @property string $time
  * @property int $current_status
@@ -35,11 +36,11 @@ class Document extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cabinet_id', 'document_num', 'date', 'time', 'current_status'], 'required', 'message' => 'Поле не должно быть пустым'],
+            [['cabinet_id', 'document_num', 'document_ref', 'date', 'time', 'current_status'], 'required', 'message' => 'Поле не должно быть пустым'],
             [['cabinet_id', 'current_status'], 'integer'],
             [['date', 'time'], 'safe'],
             [['description'], 'string'],
-            [['document_num'], 'string', 'max' => 55],
+            [['document_num', 'document_ref'], 'string', 'max' => 55],
             [['cabinet_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cabinet::className(), 'targetAttribute' => ['cabinet_id' => 'id']],
         ];
     }
@@ -53,6 +54,7 @@ class Document extends \yii\db\ActiveRecord
             'id' => 'ID',
             'cabinet_id' => 'Cabinet ID',
             'document_num' => 'Document Num',
+            'document_ref' => 'Document Ref',
             'date' => 'Date',
             'time' => 'Time',
             'current_status' => 'Current Status',
@@ -111,6 +113,30 @@ class Document extends \yii\db\ActiveRecord
         $writeHistory->status=$message;
         $writeHistory->save();
 
+        return $this->convertCodeStatus($code);
+    }
+
+    public function deleteOnServer($apiKey, $ref)
+    {
+        $client = new Client();
+
+        $delete = $client->createRequest()
+            ->setFormat(Client::FORMAT_JSON)
+            ->setUrl('https://api.novaposhta.ua/v2.0/json/')
+            ->setData([
+                'apiKey' => $apiKey,
+                'modelName' => 'InternetDocument',
+                'calledMethod' => 'delete',
+                'methodProperties' => [
+                    'DocumentRefs' => $ref
+                ]
+            ])->send();
+
+        return $delete->data['success'];
+    }
+
+    public function convertCodeStatus($code)
+    {
         switch ($code)
         {
             case 1: return 1; break;

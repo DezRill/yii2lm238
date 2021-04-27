@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Cabinet;
 use app\models\DocumentCreateRequest;
+use app\models\DocumentDownloadModel;
 use app\models\DocumentStatusHistory;
 use kartik\slider\Slider;
 use Yii;
@@ -12,6 +13,7 @@ use app\models\DocumentSearch;
 use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\httpclient\Client;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -44,10 +46,14 @@ class DocumentController extends Controller
         $searchModel = new DocumentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
 
+        $downloadModel = new DocumentDownloadModel();
+        $downloadModel->apiKey = $cabinet->api_key;
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'cabinet' => $cabinet,
+            'downloadModel' => $downloadModel,
         ]);
     }
 
@@ -87,7 +93,7 @@ class DocumentController extends Controller
                     Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка при создании накладной. Пожалуйста, проверьте корректность данных.');
                 }
             } else {
-                Yii::$app->session->setFlash('danger', 'Ошибка при заполнении данных. Пожалуйста, попробуйте ещё раз.');
+                Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка при заполнении данных. Пожалуйста, попробуйте ещё раз.');
                 $this->refresh();
             }
         }
@@ -138,11 +144,14 @@ class DocumentController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $c_id = $model->cabinet_id;
-        $model->delete();
-        Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладная удалена.');
-
-        return $this->redirect(['index', 'id' => $c_id]);
+        $cabinet = Cabinet::findOne($model->cabinet_id);
+        if ($model->deleteOnServer($cabinet->api_key, $model->document_ref))
+        {
+            $model->delete();
+            Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладная удалена.');
+        }
+        else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладной. Пожалуйста, попробуйте ещё раз.');
+        return $this->redirect(['index', 'id' => $cabinet->id]);
     }
 
     public function actionMassiveDelete()
@@ -150,11 +159,15 @@ class DocumentController extends Controller
         $ids = Yii::$app->request->post('ids');
         if (!empty($ids)) {
             $model = Document::findOne($ids[0]);
+            $cabinet=Cabinet::findOne($model->cabinet_id);
             foreach ($ids as $id) {
                 $model = $this->findModel($id);
-                $model->delete();
-                Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладные удалены.');
-                return $this->renderAjax('_messages');
+                if ($model->deleteOnServer($cabinet->api_key, $model->document_ref))
+                {
+                    $model->delete();
+                    Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладные удалены.');
+                }
+                else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладн. Пожалуйста, попробуйте ещё раз.');
             }
             return $this->redirect(['index', 'id' => $model->cabinet_id]);
         }
@@ -173,19 +186,28 @@ class DocumentController extends Controller
         }
     }
 
+    public function actionDownloadDocuments($id)
+    {
+        $model = new DocumentDownloadModel();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->downloadDocuments($id);
+        }
+        return $this->redirect(['index', 'id' => $id]);
+    }
+
     public function actionRenderNotification($result)
     {
-        switch ($result){
+        switch ($result) {
             case 0:
                 Yii::$app->session->setFlash('success', '<span class="glyphicon glyphicon-ok-sign"></span> Данные успешно обновлены.');
                 return $this->renderAjax('_messages');
-            break;
+                break;
             case 1:
-                Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span>Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
+                Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка обновления данных. Пожалуйста, попробуйте ещё раз.');
                 return $this->renderAjax('_messages');
-            break;
+                break;
         }
-
     }
 
     /**
@@ -195,7 +217,8 @@ class DocumentController extends Controller
      * @return Document the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected
+    function findModel($id)
     {
         if (($model = Document::findOne($id)) !== null) {
             return $model;
@@ -204,7 +227,8 @@ class DocumentController extends Controller
         throw new NotFoundHttpException('Страница не существует.');
     }
 
-    public function actionAddCargo()
+    public
+    function actionAddCargo()
     {
         $key = Yii::$app->request->post('key');
 

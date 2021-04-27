@@ -95,20 +95,8 @@ class DocumentCreateRequest extends Model
                 'integer', 'message' => 'Только целые числа'
             ],
             [['seatParams', 'seatsAmount'], 'safe'],
-            //[['seatParams'], 'seatValidation'],
         ];
     }
-
-
-    /*public function seatValidation($attr)
-    {
-        foreach ($this->$attr as $item) {
-            if (empty($item['weight']) || empty($item['length']) || empty($item['width']) || empty($item['height'])) {
-                $this->addError($attr, 'Поля должны быть заполнены');
-            }
-        }
-    }*/
-
 
     public function sendData($apiKey, $id)
     {
