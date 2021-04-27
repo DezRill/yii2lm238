@@ -42,8 +42,21 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
         <?php \yii\bootstrap\Modal::end() ?>
 
         <div class="massive-operations">
-            <?= Html::button('<span class="glyphicon glyphicon-repeat"></span>' . ' Обновить статус', ['class' => 'btn btn-primary', 'id' => 'updateAllBtn']) ?>
-            <?= Html::button('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['class' => 'btn btn-danger', 'id' => 'deleteAllBtn']) ?>
+            <?//= Html::button('<span class="glyphicon glyphicon-repeat"></span>' . ' Обновить статус', ['class' => 'btn btn-primary', 'id' => 'updateAllBtn']) ?>
+            <?//= Html::button('<span class="glyphicon glyphicon-trash"></span>' . ' Удалить', ['class' => 'btn btn-danger', 'id' => 'deleteAllBtn']) ?>
+            <?= \yii\bootstrap\ButtonDropdown::widget([
+                'encodeLabel' => false,
+                'label' => '<span class="glyphicon glyphicon-menu-hamburger"></span>',
+                'dropdown' => [
+                    'items' => [
+                        ['label' => Html::a('<span class="glyphicon glyphicon-repeat"></span> Обновить статус', '#', ['id' => 'updateAllBtn']), 'encode' => false],
+                        ['label' => Html::a('<span class="glyphicon glyphicon-trash"></span> Удалить', '#', ['id' => 'deleteAllBtn']), 'encode' => false],
+                    ]
+                ],
+                'options' => [
+                    'style' => 'background-color:inherit;',
+                ],
+            ]) ?>
         </div>
     </div>
     <div class="check-item-action">
@@ -55,6 +68,7 @@ $this->registerJsFile('@web/js/documentIndex.js', ['depends' => 'yii\web\YiiAsse
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_documentItem',
+        'viewParams' => ['cabinet' => $cabinet],
         'summary' => '',
     ])
     ?>

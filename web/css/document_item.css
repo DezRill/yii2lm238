@@ -1,5 +1,10 @@
-.btn-item {
-    width: 160px;
+.dropDown {
+    position: absolute;
+    left: 82.5%;
+}
+
+.dropdown-header a {
+    font-size: 14px;
 }
 
 .document-menu {
@@ -68,4 +73,9 @@
 
 .massive-operations {
     float: right;
+}
+
+#dropdownMenuButton {
+    background-color: inherit;
+    transform: scale(1.2);
 }
