@@ -17,15 +17,15 @@ $this->registerCss($acceptBtnStyle);
 
 <div class="form-group">
     <?= Html::label('Длина', '', ['class' => 'control-label']) ?>
-    <?= Html::input('text', 'modal-length', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-length']) ?>
+    <?= Html::input('number', 'modal-length', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-length']) ?>
     <div class="help-block"></div>
 
     <?= Html::label('Ширина', '', ['class' => 'control-label']) ?>
-    <?= Html::input('text', 'modal-width', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-width']) ?>
+    <?= Html::input('number', 'modal-width', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-width']) ?>
     <div class="help-block"></div>
 
     <?= Html::label('Высота', '', ['class' => 'control-label']) ?>
-    <?= Html::input('text', 'modal-height', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-height']) ?>
+    <?= Html::input('number', 'modal-height', '', ['class' => 'form-control', 'id' => 'modal-cargo-element-height']) ?>
     <div class="help-block"></div>
 </div>
 

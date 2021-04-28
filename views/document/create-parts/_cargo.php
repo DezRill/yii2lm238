@@ -27,7 +27,7 @@ use yii\helpers\Html;
     <div class="element-footer">
         <div class="overweight hidden">
             <b><?= Html::label('Фактический вес, кг') ?></b>
-            <?= Html::input('text', 'DocumentCreateRequest[seatParams][' . $key . '][weight]', '', ['class' => 'cargo-element-weight']) ?>
+            <?= Html::input('number', 'DocumentCreateRequest[seatParams][' . $key . '][weight]', '', ['class' => 'cargo-element-weight']) ?>
         </div>
         <b><?= Html::label('Габариты') ?></b>
         <div class="element-footer-right">
