@@ -145,12 +145,10 @@ class DocumentController extends Controller
     {
         $model = $this->findModel($id);
         $cabinet = Cabinet::findOne($model->cabinet_id);
-        if ($model->deleteOnServer($cabinet->api_key, $model->document_ref))
-        {
+        if ($model->deleteOnServer($cabinet->api_key, $model->document_ref)) {
             $model->delete();
             Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладная удалена.');
-        }
-        else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладной. Пожалуйста, попробуйте ещё раз.');
+        } else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладной. Пожалуйста, попробуйте ещё раз.');
         return $this->redirect(['index', 'id' => $cabinet->id]);
     }
 
@@ -159,15 +157,13 @@ class DocumentController extends Controller
         $ids = Yii::$app->request->post('ids');
         if (!empty($ids)) {
             $model = Document::findOne($ids[0]);
-            $cabinet=Cabinet::findOne($model->cabinet_id);
+            $cabinet = Cabinet::findOne($model->cabinet_id);
             foreach ($ids as $id) {
                 $model = $this->findModel($id);
-                if ($model->deleteOnServer($cabinet->api_key, $model->document_ref))
-                {
+                if ($model->deleteOnServer($cabinet->api_key, $model->document_ref)) {
                     $model->delete();
                     Yii::$app->session->setFlash('warning', '<span class="glyphicon glyphicon-info-sign"></span> Накладные удалены.');
-                }
-                else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладн. Пожалуйста, попробуйте ещё раз.');
+                } else Yii::$app->session->setFlash('danger', '<span class="glyphicon glyphicon-remove-sign"></span> Ошибка удаления накладн. Пожалуйста, попробуйте ещё раз.');
             }
             return $this->redirect(['index', 'id' => $model->cabinet_id]);
         }
@@ -177,12 +173,9 @@ class DocumentController extends Controller
     {
         $model = $this->findModel($id);
         if (!empty($cabinet = Cabinet::findOne($model->cabinet_id))) {
-            try {
-                $model->current_status = $model->updateStatus($cabinet->api_key);
-                $model->save();
-                return $this->asJson(['state' => $model->current_status]);
-            } catch (ErrorException $e) {
-            }
+            $model->current_status = $model->updateStatus($cabinet->api_key);
+            $model->save();
+            return $this->asJson(['state' => $model->current_status]);
         }
     }
 
