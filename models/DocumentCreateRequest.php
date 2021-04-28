@@ -95,6 +95,7 @@ class DocumentCreateRequest extends Model
                 'integer', 'message' => 'Только целые числа'
             ],
             [['seatParams', 'seatsAmount'], 'safe'],
+            [['date'], 'compare', 'compareValue' => date('d.m.Y'), 'operator' => '>=', 'message' => 'Дата не может быть меньше, чем сегодня'],
         ];
     }
 
