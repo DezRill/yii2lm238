@@ -210,8 +210,7 @@ class DocumentController extends Controller
      * @return Document the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected
-    function findModel($id)
+    protected function findModel($id)
     {
         if (($model = Document::findOne($id)) !== null) {
             return $model;
@@ -220,8 +219,7 @@ class DocumentController extends Controller
         throw new NotFoundHttpException('Страница не существует.');
     }
 
-    public
-    function actionAddCargo()
+    public function actionAddCargo()
     {
         $key = Yii::$app->request->post('key');
 

@@ -13,79 +13,78 @@ $this->registerJsFile('@web/js/counterPartyChanged.js', ['depends' => 'yii\web\Y
 $this->registerJsFile('@web/js/townChanged.js', ['depends' => 'yii\web\YiiAsset']);
 
 $requestDataTowns = <<<JS
-
 function(params) {
     var apiKey = $('#cabinet-api_key').val();
     
     var query = JSON.stringify({
-        modelName: "Address",
-        calledMethod: "getCities",
-        apiKey: apiKey,
-        methodProperties: {
-            FindByString: params.term,
-            Limit:30,
-            Page: params.page
-        },
+    modelName: "Address",
+    calledMethod: "getCities",
+    apiKey: apiKey,
+    methodProperties: {
+    FindByString: params.term,
+    Limit:30,
+    Page: params.page
+    },
     });
     return query;
 }
 JS;
 
 $resultsJsTowns = <<<JS
-function (response, params) {
+        function (response, params) {
 
-    params.page = params.page || 1;
+        params.page = params.page || 1;
 
-    return {
+        return {
         results: response.data.map(function(item) {
-            var text =item["Description"];
-            return {
-                id : item.Ref,
-                text : text
-            };
+        var text =item["Description"];
+        return {
+        id : item.Ref,
+        text : text
+        };
         }),
         pagination: {
-            more: (params.page * 30) < Number(response.info.totalCount)
-        }
-    };
+        more: (params.page * 30) < Number(response.info.totalCount)
+}
+};
 }
 JS;
 
 $requestDataDepartments = <<<JS
-function(params) {
-    var apiKey = $('#cabinet-api_key').val();
-    
-    var query = JSON.stringify({
+        function(params) {
+        var apiKey = $('#cabinet-api_key').val();
+
+        var query = JSON.stringify({
         modelName: "Address",
-        calledMethod: "getWarehouses",
-        apiKey: apiKey,
-        methodProperties: {
-            Limit:30,
-            CityRef: $('#cabinet-town').val(),
-            Page: params.page
-        },
-    });
-    return query;
+calledMethod: "getWarehouses",
+apiKey: apiKey,
+methodProperties: {
+Limit:30,
+CityRef: $('#cabinet-town').val(),
+Page: params.page
+},
+});
+return query;
 }
 JS;
 
 $resultsJsDepartments = <<<JS
-function (response, params) {
+        function (response, params) {
 
-    params.page = params.page || 1;
+        params.page = params.page || 1;
 
-    return {
+        return {
         results: response.data.map(function(item) {
-            var text =item["Description"];
-            return {
-                id : item.Ref,
-                text : text
-            };
+        var text =item["Description"];
+        return {
+        id : item.Ref,
+        text : text
+        };
         }),
         pagination: {
-            more: (params.page * 30) < Number(response.info.totalCount)
-        }
-    };
+        more: (params.page * 30) < Number(response.info.totalCount)
+}
+};
 }
 JS;
 ?>

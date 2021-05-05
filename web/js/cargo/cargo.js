@@ -219,13 +219,26 @@ $(document).ready(function () {
             remove_button.closest('.cargo-element').remove();
             posts--;
 
-            $('.cargo-element-seats-amount').text(posts + 1);
+            $('.cargo-element-seats-amount').val(posts + 1);
 
             var places = cargo_list.find('.placeNum');
 
             for (var i = 0; i < places.length; i++) {
                 cargo_list.find(places[i]).text('Место №' + (i + 1));
             }
+
+            $(document).find('.cargo-element-length').each(function (index, value) {
+                value.name = 'DocumentCreateRequest[seatParams][' + index + '][volumetricLength]';
+            });
+            $(document).find('.cargo-element-width').each(function (index, value) {
+                value.name = 'DocumentCreateRequest[seatParams][' + index + '][volumetricWidth]';
+            });
+            $(document).find('.cargo-element-height').each(function (index, value) {
+                value.name = 'DocumentCreateRequest[seatParams][' + index + '][volumetricHeight]';
+            });
+            $(document).find('.cargo-element-weight').each(function (index, value) {
+                value.name = 'DocumentCreateRequest[seatParams][' + index + '][weight]';
+            });
 
             if (posts === 0) $(document).find('.removeElement').addClass('hidden');
         }

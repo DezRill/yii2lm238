@@ -47,7 +47,9 @@ $(document).on('change', '#cabinet-api_key', function () {
             if (data["success"]) {
                 for (let item of data["data"]) {
                     $('#cabinet-counterparty').append($('<option></option>').val(item["Ref"]).text(item["Description"]));
+                    $('#cabinet-counterparty select').val(item["Ref"]);
                     $('#cabinet-recipient_counterparty').append($('<option></option>').val(item["Ref"]).text(item["Description"]));
+                    $('#cabinet-recipient_counterparty select').val(item["Ref"]);
                 }
             }
             else {
